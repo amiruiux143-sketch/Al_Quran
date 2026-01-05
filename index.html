@@ -3,47 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Al-Qur'an Pro</title>
+    <title>Al-Qur'an Mobile Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --gold: #b2904f; --text: #eee; --fz: 34px; --lh: 2.2; --br: 100%; }
+        :root { --bg: #000; --gold: #b2904f; --text: #eee; --fz: 32px; --lh: 2.0; --br: 100%; }
         body.light { --bg: #fff; --text: #000; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; overflow: hidden; }
 
-        /* БАСМАЛА */
-        #splash { position: fixed !important; inset: 0 !important; background: #000 !important; display: flex !important; flex-direction: column; align-items: center; justify-content: center; z-index: 1000000 !important; }
-        .b-txt { font-family: 'Amiri', serif; font-size: 36px; color: var(--gold); text-align: center; margin-bottom: 20px; }
+        /* СПЛЭШ */
+        #splash { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000000; transition: opacity 0.8s; }
+        .b-txt { font-family: 'Amiri', serif; font-size: 34px; color: var(--gold); text-align: center; margin-bottom: 20px; }
         .spin { width: 40px; height: 40px; border: 3px solid #1a1a1a; border-top-color: var(--gold); border-radius: 50%; animation: s 0.8s linear infinite; }
         @keyframes s { to { transform: rotate(360deg); } }
 
         main { height: 100vh; overflow-y: auto; padding-bottom: 100px; filter: brightness(var(--br)); }
         header { position: sticky; top: 0; z-index: 1000; background: var(--bg); padding: 15px; border-bottom: 1px solid #222; }
         #search { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #333; background: #111; color: #fff; margin-top: 10px; font-size: 16px; }
-        body.light #search { background: #f2f2f2; color: #000; border-color: #ddd; }
 
         .p { display: none; padding: 10px; }
         .p.active { display: block; }
-        .item { display: flex; align-items: center; padding: 20px 10px; border-bottom: 1px solid #222; }
-        .num { color: var(--gold); width: 45px; font-weight: bold; }
-        .ar { font-family: 'Amiri', serif; font-size: 28px; color: var(--gold); margin-left: auto; }
+        .item { display: flex; align-items: center; padding: 18px 10px; border-bottom: 1px solid #222; }
+        .num { color: var(--gold); width: 40px; font-weight: bold; }
+        .ar { font-family: 'Amiri', serif; font-size: 26px; color: var(--gold); margin-left: auto; }
 
-        /* НИЖНЕЕ МЕНЮ */
-        nav { position: fixed !important; bottom: 0 !important; left: 0 !important; width: 100% !important; height: 85px !important; background: var(--bg) !important; display: flex !important; border-top: 1px solid #222 !important; z-index: 900000 !important; padding-bottom: env(safe-area-inset-bottom); }
-        .btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #666; font-weight: bold; cursor: pointer; }
-        .btn.active { color: var(--gold); }
-        .btn i { font-style: normal; font-size: 24px; margin-bottom: 4px; }
-
+        /* ОКНО ЧТЕНИЯ И АЯТЫ */
         .win { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 950000; overflow-y: auto; padding-bottom: 100px; }
-        .win-h { position: sticky; top: 0; background: inherit; height: 65px; display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid #222; }
-        .art { direction: rtl; font-family: 'Amiri', serif; font-size: var(--fz); line-height: var(--lh); text-align: right; padding: 25px; }
-        .rut { padding: 0 25px 35px; opacity: 0.8; line-height: 1.6; border-bottom: 1px solid #222; }
+        .win-h { position: sticky; top: 0; background: inherit; height: 65px; display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid #222; z-index: 100; }
         
+        .inner-bism { font-family: 'Amiri', serif; font-size: 32px; color: var(--gold); text-align: center; padding: 30px 10px; border-bottom: 1px double var(--gold); margin-bottom: 20px; }
+        
+        .ayah-card { padding: 20px; border-bottom: 1px solid #222; display: flex; flex-direction: column; }
+        .art { direction: rtl; font-family: 'Amiri', serif; font-size: var(--fz); line-height: var(--lh); text-align: right; margin-bottom: 15px; }
+        .rut { opacity: 0.8; line-height: 1.5; font-size: 16px; margin-bottom: 15px; }
+        
+        .play-btn { align-self: flex-start; background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 13px; }
+        .play-btn.playing { background: var(--gold); color: #fff; }
+
+        nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: var(--bg); display: flex; border-top: 1px solid #222; z-index: 900000; padding-bottom: env(safe-area-inset-bottom); }
+        .btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #666; font-weight: bold; }
+        .btn.active { color: var(--gold); }
+        .btn i { font-style: normal; font-size: 22px; margin-bottom: 4px; }
+
         .card { background: #0f0f0f; border-radius: 16px; padding: 18px; margin-bottom: 15px; border: 1px solid #222; }
-        body.light .card { background: #f9f9f9; border-color: #eee; }
-        .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         input[type="range"] { accent-color: var(--gold); width: 50%; }
-        .play { background: var(--gold); color: #fff; border: none; padding: 12px 25px; border-radius: 20px; margin: 15px 20px; font-weight: bold; }
     </style>
 </head>
 <body class="dark">
@@ -55,10 +59,9 @@
 
 <main id="main_scroll">
     <header>
-        <h1 id="tit" style="margin:0; font-size: 20px; color: var(--gold);">Al-Quran pro</h1>
+        <h1 id="tit" style="margin:0; font-size: 20px; color: var(--gold);">Al Quran pro</h1>
         <input type="text" id="search" placeholder="Поиск суры..." onkeyup="filter()">
     </header>
-
     <div id="q_p" class="p active"></div>
     <div id="n_p" class="p"></div>
     <div id="s_p" class="p">
@@ -67,8 +70,7 @@
             <div class="row"><span>Яркость</span><input type="range" min="30" max="100" value="100" oninput="document.documentElement.style.setProperty('--br', this.value+'%')"></div>
         </div>
         <div class="card">
-            <div class="row"><span>Размер текста</span><input type="range" min="20" max="70" value="34" oninput="document.documentElement.style.setProperty('--fz', this.value+'px')"></div>
-            <div class="row"><span>Жирный текст</span><input type="checkbox" onchange="document.body.style.fontWeight=this.checked?'700':'400'"></div>
+            <div class="row"><span>Размер текста</span><input type="range" min="20" max="75" value="32" oninput="document.documentElement.style.setProperty('--fz', this.value+'px')"></div>
         </div>
     </div>
 </main>
@@ -79,15 +81,14 @@
 </div>
 
 <nav>
-    <div class="btn active" onclick="tab('q', this, 'Коран')"><i>📖</i>Коран</div>
-    <div class="btn" onclick="tab('n', this, '99 Имен')"><i>✨</i>Имена</div>
-    <div class="btn" onclick="tab('s', this, 'Опции')"><i>⚙️</i>Опции</div>
+    <div class="btn active" onclick="tab('q', this, 'Коран')"><i>•</i>Коран</div>
+    <div class="btn" onclick="tab('n', this, '99 Имен')"><i>•</i>Имена</div>
+    <div class="btn" onclick="tab('s', this, 'Опции')"><i>•</i>Опции</div>
 </nav>
 
 <script>
 let surs = [], aud = new Audio(), curB = null;
 
-// Сокращенная база для стабильности
 const names = [
     {a:"الرَّحْمَنُ", t:"Ar-Rahman", r:"Милостивый"}, {a:"الرَّحِيمُ", t:"Ar-Rahim", r:"Милосердный"},
     {a:"الْمَلِكُ", t:"Al-Malik", r:"Царь"}, {a:"الْقُدُّوسُ", t:"Al-Quddus", r:"Святой"},
@@ -105,7 +106,7 @@ const names = [
     {a:"الْبَصِيرُ", t:"Al-Basir", r:"Всевидящий"}, {a:"الْحَكَمُ", t:"Al-Hakam", r:"Судья"},
     {a:"الْعَدْلُ", t:"Al-Adl", r:"Справедливый"}, {a:"اللَّطِيفُ", t:"Al-Latif", r:"Добрый"},
     {a:"الْخَبِيرُ", t:"Al-Khabir", r:"Осведомленный"}, {a:"الْحَلِيمُ", t:"Al-Halim", r:"Снисходительный"},
-    {a:"الْعَظِيمُ", t:"Al-Aziz", r:"Величайший"}, {a:"الْغَفُورُ", t:"Al-Ghafur", r:"Многопрощающий"},
+    {a:"الْعَظِيمُ", t:"Al-Azim", r:"Величайший"}, {a:"الْغَفُورُ", t:"Al-Ghafur", r:"Многопрощающий"},
     {a:"الشَّكُورُ", t:"Ash-Shakur", r:"Благодарный"}, {a:"الْعَلِيُّ", t:"Al-Aliy", r:"Высочайший"},
     {a:"الْكَبِيرُ", t:"Al-Kabir", r:"Великий"}, {a:"الْحَفِيظُ", t:"Al-Hafiz", r:"Хранитель"},
     {a:"الْمُقِيتُ", t:"Al-Muqit", r:"Питающий"}, {a:"الْحَسِيبُ", t:"Al-Hasib", r:"Считающий"},
@@ -141,27 +142,60 @@ const names = [
     {a:"الصَّبُورُ", t:"As-Sabur", r:"Терпеливый"}
 ];
 
-
 function tab(p, el, t) {
     document.querySelectorAll('.p, .btn').forEach(x => x.classList.remove('active'));
     document.getElementById(p+'_p').classList.add('active');
     el.classList.add('active');
     document.getElementById('tit').innerText = t;
     document.getElementById('search').style.display = p==='s'?'none':'block';
-    document.getElementById('main_scroll').scrollTop = 0;
 }
 
-function init() {
-    setTimeout(() => {
-        const s = document.getElementById('splash');
-        if(s) { s.style.opacity = '0'; setTimeout(() => s.remove(), 800); }
-    }, 4000);
+async function openR(id, n) {
+    const r = document.getElementById('reader');
+    r.style.display = 'block';
+    document.getElementById('wt').innerText = n;
+    document.getElementById('wc').innerHTML = "<p style='text-align:center;padding:50px;'>Загрузка...</p>";
+    
+    const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,ru.kuliev`);
+    const d = await res.json();
+    
+    let content = "";
+    if (id !== 9) content += `<div class="inner-bism">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
 
-    fetch("https://api.alquran.cloud/v1/surah").then(r => r.json()).then(d => {
-        surs = d.data;
-        renderQ(surs);
-        renderN(names);
-    });
+    content += d.data[0].ayahs.map((a, i) => {
+        let text = a.text;
+        if (i === 0) {
+            if (id === 1) return ""; 
+            else if (id !== 9) {
+                let words = text.split(' ');
+                text = words.slice(4).join(' ');
+            }
+        }
+        return `<div class="ayah-card">
+            <div class="art">${text}</div>
+            <div class="rut"><b>${i+1}.</b> ${d.data[1].ayahs[i].text}</div>
+            <button class="play-btn" onclick="playA(${a.number}, this)">▶ Слушать</button>
+        </div>`;
+    }).join('');
+    
+    document.getElementById('wc').innerHTML = content;
+    r.scrollTop = 0;
+}
+
+function playA(n, b) {
+    if(curB === b && !aud.paused) { aud.pause(); b.innerText="▶ Слушать"; b.classList.remove('playing'); return; }
+    if(curB) { curB.innerText="▶ Слушать"; curB.classList.remove('playing'); }
+    curB = b; b.innerText="🔊 Играет"; b.classList.add('playing');
+    aud.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${n}.mp3`;
+    aud.play();
+    aud.onended = () => { b.innerText="▶ Слушать"; b.classList.remove('playing'); };
+}
+
+function closeR() { document.getElementById('reader').style.display='none'; aud.pause(); }
+
+function filter() {
+    let v = document.getElementById('search').value.toLowerCase();
+    renderQ(surs.filter(s => s.englishName.toLowerCase().includes(v)));
 }
 
 function renderQ(l) {
@@ -172,33 +206,17 @@ function renderN(l) {
     document.getElementById('n_p').innerHTML = l.map((n, i) => `<div class="item"><div class="num">${i+1}</div><div class="info"><b>${n.t}</b><br><small>${n.r}</small></div><div class="ar">${n.a}</div></div>`).join('');
 }
 
-function filter() {
-    let v = document.getElementById('search').value.toLowerCase();
-    renderQ(surs.filter(s => s.englishName.toLowerCase().includes(v)));
-}
-
-async function openR(id, n) {
-    const r = document.getElementById('reader');
-    r.style.display = 'block';
-    document.getElementById('wt').innerText = n;
-    document.getElementById('wc').innerHTML = "<p style='text-align:center;padding:50px;'>Загрузка...</p>";
-    const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,ru.kuliev`);
-    const d = await res.json();
-    document.getElementById('wc').innerHTML = d.data[0].ayahs.map((a, i) => `<div><div class="art">${a.text}</div><div class="rut"><b>${i+1}.</b> ${d.data[1].ayahs[i].text}</div><button class="play" onclick="playA(${a.number}, this)">▶ Слушать</button></div>`).join('');
-}
-
-function playA(n, b) {
-    if(curB === b && !aud.paused) { aud.pause(); b.innerText="▶ Слушать"; return; }
-    if(curB) curB.innerText="▶ Слушать";
-    curB = b; b.innerText="🔊 Чтение...";
-    aud.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${n}.mp3`;
-    aud.play();
-    aud.onended = () => b.innerText="▶ Слушать";
-}
-
-function closeR() { document.getElementById('reader').style.display='none'; aud.pause(); }
-
-window.onload = init;
+window.onload = () => {
+    setTimeout(() => {
+        const s = document.getElementById('splash');
+        if(s) { s.style.opacity = '0'; setTimeout(() => s.remove(), 800); }
+    }, 3000);
+    fetch("https://api.alquran.cloud/v1/surah").then(r => r.json()).then(d => {
+        surs = d.data;
+        renderQ(surs);
+        renderN(names);
+    });
+};
 </script>
 </body>
 </html>
