@@ -3,116 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Al-Qur’an Mobile Pro</title>
+    <title>Al-Qur'an Mobile</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #ffffff; --header: #fbfbfb; --gold: #b2904f; --line: #f0f0f0; --text: #000; --fz-ar: 34px; --lh-ar: 2.2; --fw-ar: 400; }
+        :root { --bg: #ffffff; --header: #fbfbfb; --gold: #b2904f; --line: #f0f0f0; --text: #000; --fz-ar: 32px; }
         body.dark-mode { --bg: #121212; --header: #1e1e1e; --line: #333; --text: #eee; }
-        body.green-mode { --gold: #2e7d32; }
-        
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); font-family: 'Montserrat', sans-serif; margin: 0; padding-bottom: 80px; color: var(--text); transition: 0.3s; }
-        
-        .main-header { position: sticky; top: 0; z-index: 1000; background: var(--header); padding: 12px 15px; border-bottom: 1px solid var(--line); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .main-header h1 { font-size: 22px; margin: 0; font-weight: 700; color: var(--gold); }
-        
-        .lang-switch { display: flex; gap: 6px; }
-        .lang-btn { padding: 5px 12px; border-radius: 12px; border: 1px solid var(--gold); background: none; color: var(--gold); cursor: pointer; font-weight: 700; font-size: 11px; }
-        .lang-btn.active { background: var(--gold); color: white; }
-        
-        #surahSearch { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; background: #f0f0f0; outline: none; font-size: 14px; color: #333; }
 
-        .page-sec { display: none; }
+        /* Splash Screen */
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.8s; color: white; }
+        .bism-text { font-family: 'Amiri', serif; font-size: 36px; color: var(--gold); margin-bottom: 10px; }
+
+        .main-header { position: sticky; top: 0; z-index: 1000; background: var(--header); padding: 12px 15px; border-bottom: 1px solid var(--line); }
+        .main-header h1 { font-size: 22px; margin: 0; font-weight: 700; color: var(--gold); }
+        #surahSearch { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; background: #f0f0f0; outline: none; margin-top: 10px; font-size: 14px; color: #000; }
+
+        .page-sec { display: none; padding: 10px; }
         .page-sec.active { display: block; }
 
-        .surah-item { display: flex; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--line); cursor: pointer; }
-        .surah-num { color: var(--gold); font-size: 14px; width: 45px; font-weight: bold; }
-        .surah-info { flex-grow: 1; }
-        .surah-name-en { font-size: 16px; font-weight: 600; }
-        .surah-name-ar { font-size: 24px; color: var(--gold); font-family: 'Amiri', serif; }
+        /* List Items */
+        .item { display: flex; align-items: center; padding: 18px 10px; border-bottom: 1px solid var(--line); cursor: pointer; }
+        .num { color: var(--gold); font-size: 14px; width: 40px; font-weight: bold; }
+        .info { flex-grow: 1; }
+        .ar-name { font-size: 24px; color: var(--gold); font-family: 'Amiri', serif; }
 
-        .surah-content { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; }
-        .surah-header { position: sticky; top: 0; z-index: 2001; background: var(--header); height: 60px; display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid var(--line); }
-        .back-btn { font-size: 32px; color: var(--gold); cursor: pointer; padding: 0 10px; }
-        
-        .ayah-box { padding: 25px 20px; border-bottom: 1px solid var(--line); }
-        .arabic { direction: rtl; font-family: 'Amiri', serif; font-size: var(--fz-ar); line-height: var(--lh-ar); font-weight: var(--fw-ar); text-align: right; margin-bottom: 15px; color: var(--text); }
-        .translation { font-size: 17px; line-height: 1.6; color: var(--text); opacity: 0.8; margin-bottom: 15px; }
+        /* Prayer Card */
+        .prayer-card { background: var(--header); border-radius: 20px; padding: 25px; border: 1px solid var(--line); text-align: center; }
+        .gps-btn { width: 100%; padding: 16px; border-radius: 15px; border: none; background: var(--gold); color: white; font-weight: bold; cursor: pointer; margin-bottom: 15px; font-size: 14px; }
+        .prayer-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); font-weight: 600; }
 
-        .audio-btn { 
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(178, 144, 79, 0.1); border: 1px solid var(--gold); color: var(--gold); 
-            padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; font-size: 13px;
-        }
-        .audio-btn.playing { background: var(--gold); color: white; }
+        /* Surah Content Window */
+        .window { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; }
+        .window-header { position: sticky; top: 0; background: var(--header); height: 60px; display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid var(--line); }
+        .close-btn { font-size: 30px; color: var(--gold); border: none; background: none; cursor: pointer; }
 
-        .nav-bar { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--header); display: flex; border-top: 1px solid var(--line); z-index: 1500; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #888; cursor: pointer; font-weight: 600; }
-        .nav-item.active { color: var(--gold); }
+        .ayah-box { padding: 20px; border-bottom: 1px solid var(--line); }
+        .ar-text { direction: rtl; font-family: 'Amiri', serif; font-size: var(--fz-ar); line-height: 2; text-align: right; margin-bottom: 15px; }
+        .ru-text { font-size: 16px; opacity: 0.8; line-height: 1.6; }
+        .audio-btn { margin-top: 15px; background: rgba(178, 144, 79, 0.1); border: 1px solid var(--gold); color: var(--gold); padding: 8px 18px; border-radius: 20px; font-weight: bold; cursor: pointer; }
 
-        .settings-container { padding: 20px; }
-        .set-card { background: var(--header); padding: 15px; border-radius: 15px; margin-bottom: 12px; border: 1px solid var(--line); }
-        .set-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        input[type="range"] { width: 100%; accent-color: var(--gold); margin-top: 10px; }
+        /* Nav Bar */
+        .nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--header); display: flex; border-top: 1px solid var(--line); z-index: 1500; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #888; cursor: pointer; }
+        .nav-item.active { color: var(--gold); font-weight: bold; }
     </style>
 </head>
-<body>
+<body class="dark-mode">
 
-<div class="main-header" id="mainHeader">
-    <div class="header-top">
-        <h1 id="mainTitle">Al Quran</h1>
-        <div class="lang-switch">
-            <button id="btnAZ" class="lang-btn" onclick="setLang('az.mammadaliyev', 'AZ')">AZ</button>
-            <button id="btnRU" class="lang-btn active" onclick="setLang('ru.kuliev', 'RU')">RU</button>
+<div id="splash">
+    <div class="bism-text">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+    <div style="font-size: 12px; opacity: 0.6; letter-spacing: 2px;">AL-QUR'AN</div>
+</div>
+
+<header class="main-header" id="mainHeader">
+    <div style="display:flex; justify-content: space-between; align-items: center;">
+        <h1 id="pageTitle">Коран</h1>
+        <span style="font-weight: bold; color: var(--gold);">RU</span>
+    </div>
+    <input type="text" id="surahSearch" placeholder="Найти суру..." onkeyup="filterSurahs()">
+</header>
+
+<div id="quranSec" class="page-sec active"><div id="surahList"></div></div>
+<div id="namesSec" class="page-sec"><div id="namesList"></div></div>
+<div id="prayerSec" class="page-sec">
+    <div class="prayer-card">
+        <button class="gps-btn" onclick="getGPS()">📍 ОПРЕДЕЛИТЬ ВРЕМЯ НАМАЗА</button>
+        <div id="cityName" style="font-size: 12px; opacity: 0.6; margin-bottom: 10px;">Местоположение не задано</div>
+        <div id="hijriDate" style="color: var(--gold); font-weight: bold; margin-bottom: 20px;"></div>
+        <div id="prayerContent"></div>
+    </div>
+</div>
+<div id="settingsSec" class="page-sec">
+    <div style="padding: 10px;">
+        <div style="background:var(--header); padding: 20px; border-radius: 15px; border:1px solid var(--line);">
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <span>Темная тема</span>
+                <input type="checkbox" checked onchange="document.body.classList.toggle('dark-mode')">
+            </div>
+            <span>Размер шрифта:</span>
+            <input type="range" min="20" max="50" value="32" style="width:100%; margin-top:10px; accent-color: var(--gold);" oninput="document.documentElement.style.setProperty('--fz-ar', this.value + 'px')">
         </div>
     </div>
-    <input type="text" id="surahSearch" placeholder="Поиск..." onkeyup="filterSurahs()">
 </div>
 
-<div id="quranSec" class="page-sec active"><div class="surah-list" id="surahList"></div></div>
-<div id="namesSec" class="page-sec"><div class="surah-list" id="namesList"></div></div>
-
-<div id="settingsSec" class="page-sec">
-    <div class="settings-container">
-        <h2 style="color:var(--gold)">Настройки</h2>
-        <div class="set-card"><div class="set-row"><span>Темная тема</span><input type="checkbox" onchange="document.body.classList.toggle('dark-mode')"></div></div>
-        <div class="set-card"><div class="set-row"><span>Зеленая тема</span><input type="checkbox" onchange="document.body.classList.toggle('green-mode')"></div></div>
-        <div class="set-card"><div class="set-row"><span>Размер арабского: <b id="valSize">34</b></span></div><input type="range" min="20" max="60" value="34" oninput="updateSet('--fz-ar', this.value + 'px', 'valSize', this.value)"></div>
-        <div class="set-card"><div class="set-row"><span>Отступ строк: <b id="valLine">2.2</b></span></div><input type="range" min="1.5" max="3.5" step="0.1" value="2.2" oninput="updateSet('--lh-ar', this.value, 'valLine', this.value)"></div>
-        <div class="set-card"><div class="set-row"><span>Жирный шрифт</span><input type="checkbox" onchange="updateSet('--fw-ar', this.checked ? '700' : '400')"></div></div>
+<div id="surahWin" class="window">
+    <div class="window-header">
+        <button class="close-btn" onclick="closeSurah()">✕</button>
+        <h2 id="winTitle" style="flex:1; text-align:center; font-size:18px;"></h2>
     </div>
+    <div id="winContent"></div>
 </div>
 
-<div id="surahWindow" class="surah-content">
-    <div class="surah-header"><div class="back-btn" onclick="closeSurah()">‹</div><h1 id="windowTitle" style="font-size:16px; flex-grow:1; text-align:center; margin:0; font-weight:700;"></h1><div style="width:40px;"></div></div>
-    <div id="windowContainer"></div>
-</div>
-
-<nav class="nav-bar">
-    <div class="nav-item active" onclick="showPage('quran', this)"><span>📖</span>Коран</div>
-    <div class="nav-item" onclick="showPage('names', this)"><span>✨</span>Имена</div>
-    <div class="nav-item" onclick="showPage('settings', this)"><span>⚙️</span>Опции</div>
+<nav class="nav">
+    <div class="nav-item active" onclick="showPage('quran', this, 'Коран')"><span>📖</span>Коран</div>
+    <div class="nav-item" onclick="showPage('names', this, '99 Имен')"><span>✨</span>Имена</div>
+    <div class="nav-item" onclick="showPage('prayer', this, 'Намаз')"><span>🕌</span>Намаз</div>
+    <div class="nav-item" onclick="showPage('settings', this, 'Опции')"><span>⚙️</span>Опции</div>
 </nav>
 
 <script>
-const namesData = [
-    {ar:"الرَّحْمَنُ", tr:"Ar-Rahman", ru:"Милостивый", az:"Mərhəmətli"}, {ar:"الرَّحِيمُ", tr:"Ar-Rahim", ru:"Милосердный", az:"Rəhmli"}, {ar:"الْمَلِكُ", tr:"Al-Malik", ru:"Царь", az:"Hökmdar"}, {ar:"الْقُدُّوسُ", tr:"Al-Quddus", ru:"Святой", az:"Müqəddəs"}, {ar:"السَّلَامُ", tr:"As-Salam", ru:"Пречистый", az:"Sülh bəxş edən"}, {ar:"الْمُؤْمِنُ", tr:"Al-Mu'min", ru:"Оберегающий", az:"Mömin"}, {ar:"الْمُهَيْمِنُ", tr:"Al-Muhaymin", ru:"Хранитель", az:"Mühafizəçi"}, {ar:"الْعَزِيزُ", tr:"Al-Aziz", ru:"Могущественный", az:"Əziz"}, {ar:"الْجَبَّارُ", tr:"Al-Jabbar", ru:"Подчиняющий", az:"Cəbbar"}, {ar:"الْمُتَكَبِّرُ", tr:"Al-Mutakabbir", ru:"Превосходящий", az:"Mütəkəbbir"}, {ar:"الْخَالِقُ", tr:"Al-Khaliq", ru:"Творец", az:"Xaliq"}, {ar:"الْبَارِئُ", tr:"Al-Bari'", ru:"Создатель", az:"Yaradan"}, {ar:"الْمُصَوِّرُ", tr:"Al-Musawwir", ru:"Придающий облик", az:"Surətverən"}, {ar:"الْغَفَّارُ", tr:"Al-Ghaffar", ru:"Прощающий", az:"Bağışlayan"}, {ar:"الْقَهَّارُ", tr:"Al-Qahhar", ru:"Господствующий", az:"Qəhhar"}, {ar:"الْوَهَّابُ", tr:"Al-Wahhab", ru:"Дарующий", az:"Vəhhab"}, {ar:"الرَّزَّاقُ", tr:"Ar-Razzaq", ru:"Наделяющий", az:"Rəzzaq"}, {ar:"الْفَتَّاحُ", tr:"Al-Fattah", ru:"Раскрывающий", az:"Fəttah"}, {ar:"الْعَلِيمُ", tr:"Al-'Alim", ru:"Всезнающий", az:"Bilən"}, {ar:"الْقَابِضُ", tr:"Al-Qabid", ru:"Удерживающий", az:"Sıxan"}, {ar:"الْبَاسِطُ", tr:"Al-Basit", ru:"Простирающий", az:"Açan"}, {ar:"الْخَافِضُ", tr:"Al-Khafid", ru:"Унижающий", az:"Alçaldan"}, {ar:"الرَّافِعُ", tr:"Ar-Rafi'", ru:"Возвышающий", az:"Ucaldan"}, {ar:"الْمُعِزُّ", tr:"Al-Mu'izz", ru:"Дающий силу", az:"İzzətləndirən"}, {ar:"الْمُذِلُّ", tr:"Al-Mudhill", ru:"Принижающий", az:"Zəlil edən"}, {ar:"السَّمِيعُ", tr:"As-Sami'", ru:"Всеслышащий", az:"Eşidən"}, {ar:"الْبَصِيرُ", tr:"Al-Basir", ru:"Всевидящий", az:"Görən"}, {ar:"الْحَكَمُ", tr:"Al-Hakam", ru:"Судья", az:"Hökm edən"}, {ar:"الْعَدْلُ", tr:"Al-'Adl", ru:"Справедливый", az:"Ədalətli"}, {ar:"اللَّطِيفُ", tr:"Al-Latif", ru:"Проницательный", az:"Lətif"}, {ar:"الْخَبِيرُ", tr:"Al-Khabir", ru:"Всеведущий", az:"Xəbərdar"}, {ar:"الْحَلِيمُ", tr:"Al-Halim", ru:"Снисходительный", az:"Həlim"}, {ar:"الْعَظِيمُ", tr:"Al-'Azim", ru:"Величайший", az:"Əzim"}, {ar:"الْغَفُورُ", tr:"Al-Ghafur", ru:"Многопрощающий", az:"Qafur"}, {ar:"الشَّكُورُ", tr:"Ash-Shakur", ru:"Благодарный", az:"Şəkur"}, {ar:"الْعَلِيُّ", tr:"Al-'Aliyy", ru:"Высочайший", az:"Əliyy"}, {ar:"الْكَبِيرُ", tr:"Al-Kabir", ru:"Великий", az:"Kəbir"}, {ar:"الْحَفِيظُ", tr:"Al-Hafiz", ru:"Хранитель", az:"Hafiz"}, {ar:"المُقيِت", tr:"Al-Muqit", ru:"Поддерживающий", az:"Muqit"}, {ar:"الحَسيب", tr:"Al-Hasib", ru:"Достаточный", az:"Həsib"}, {ar:"الجليل", tr:"Al-Jalil", ru:"Величественный", az:"Cəlil"}, {ar:"الكريم", tr:"Al-Karim", ru:"Щедрый", az:"Kərim"}, {ar:"الرقيب", tr:"Ar-Raqib", ru:"Наблюдающий", az:"Rəqib"}, {ar:"المجيب", tr:"Al-Mujib", ru:"Отзывающийся", az:"Mücib"}, {ar:"الواسع", tr:"Al-Wasi'", ru:"Всеобъемлющий", az:"Vasi"}, {ar:"الحكيم", tr:"Al-Hakim", ru:"Мудрый", az:"Həким"}, {ar:"الودود", tr:"Al-Wadud", ru:"Любящий", az:"Vədud"}, {ar:"المجيد", tr:"Al-Majid", ru:"Славный", az:"Məcid"}, {ar:"الباعث", tr:"Al-Ba'ith", ru:"Воскрешающий", az:"Bais"}, {ar:"الشهيد", tr:"Ash-Shahid", ru:"Свидетель", az:"Şəhid"}, {ar:"الحق", tr:"Al-Haqq", ru:"Истина", az:"Haqq"}, {ar:"الوكيل", tr:"Al-Wakil", ru:"Попечитель", az:"Vəkil"}, {ar:"القوي", tr:"Al-Qawiyy", ru:"Сильнейший", az:"Qəvi"}, {ar:"المتين", tr:"Al-Matin", ru:"Непоколебимый", az:"Mətin"}, {ar:"الولي", tr:"Al-Waliyy", ru:"Друг", az:"Vəli"}, {ar:"الحميد", tr:"Al-Hamid", ru:"Достохвальный", az:"Həmid"}, {ar:"المحصي", tr:"Al-Muhsi", ru:"Считающий", az:"Muhsi"}, {ar:"المبدئ", tr:"Al-Mubdi'", ru:"Основатель", az:"Mubdi"}, {ar:"المعيد", tr:"Al-Mu'id", ru:"Возвращающий", az:"Muid"}, {ar:"المحيи", tr:"Al-Muhyi", ru:"Оживляющий", az:"Muhyi"}, {ar:"المмит", tr:"Al-Mumit", ru:"Умерщвляющий", az:"Mumit"}, {ar:"الحи", tr:"Al-Hayy", ru:"Живой", az:"Heyy"}, {ar:"القيوم", tr:"Al-Qayyum", ru:"Самодостаточный", az:"Qəyyum"}, {ar:"الواجد", tr:"Al-Wajid", ru:"Находящий", az:"Vacid"}, {ar:"الмаجد", tr:"Al-Majid", ru:"Благородный", az:"Macid"}, {ar:"الواحد", tr:"Al-Wahid", ru:"Единственный", az:"Wahid"}, {ar:"الأحد", tr:"Al-Ahad", ru:"Единый", az:"Ahad"}, {ar:"الصمد", tr:"As-Samad", ru:"Вечный", az:"Səməd"}, {ar:"القادر", tr:"Al-Qadir", ru:"Всемогущий", az:"Qadir"}, {ar:"المقتدر", tr:"Al-Muqtadir", ru:"Всесильный", az:"Muqtədir"}, {ar:"المقدم", tr:"Al-Muqaddim", ru:"Выдвигающий", az:"Muqəddim"}, {ar:"المؤخر", tr:"Al-Mu'akhkhir", ru:"Отодвигающий", az:"Muaxir"}, {ar:"الأول", tr:"Al-Awwal", ru:"Первый", az:"Əvvəl"}, {ar:"الآخر", tr:"Al-Akhir", ru:"Последний", az:"Axır"}, {ar:"الظاهر", tr:"Az-Zahir", ru:"Явный", az:"Zahir"}, {ar:"الباطن", tr:"Al-Batin", ru:"Скрытый", az:"Batin"}, {ar:"الوالي", tr:"Al-Wali", ru:"Правящий", az:"Vali"}, {ar:"المتعالي", tr:"Al-Muta'ali", ru:"Высочайший", az:"Mütəali"}, {ar:"البر", tr:"Al-Barr", ru:"Добродетельный", az:"Bərr"}, {ar:"التواب", tr:"At-Tawwab", ru:"Принимающий", az:"Təvvab"}, {ar:"المنتقم", tr:"Al-Muntaqim", ru:"Мстящий", az:"Müntəqim"}, {ar:"العفو", tr:"Al-'Afuww", ru:"Прощающий", az:"Əfüvv"}, {ar:"الرؤوف", tr:"Ar-Ra'uf", ru:"Сострадательный", az:"Rauf"}, {ar:"مالك الملك", tr:"Malik-ul-Mulk", ru:"Царь Царств", az:"Malikül-Mülk"}, {ar:"ذو الجلال والإكرام", tr:"Dhul-Jalali wal-Ikram", ru:"Обладатель Величия", az:"Zül-Cəlali vəl-İkram"}, {ar:"المقسط", tr:"Al-Muqsit", ru:"Беспристрастный", az:"Muqsit"}, {ar:"الجامع", tr:"Al-Jami'", ru:"Собирающий", az:"Cami"}, {ar:"الغни", tr:"Al-Ghaniyy", ru:"Богатый", az:"Qəni"}, {ar:"المغни", tr:"Al-Mughni", ru:"Обогащающий", az:"Muğni"}, {ar:"المانع", tr:"Al-Mani'", ru:"Лишающий", az:"Mani"}, {ar:"الضار", tr:"Ad-Darr", ru:"Причиняющий вред", az:"Darr"}, {ar:"النافع", tr:"An-Nafi'", ru:"Благотворящий", az:"Nafi"}, {ar:"النور", tr:"An-Nur", ru:"Свет", az:"Nur"}, {ar:"الهادي", tr:"Al-Hadi", ru:"Ведущий", az:"Hadi"}, {ar:"البديع", tr:"Al-Badi'", ru:"Несравненный", az:"Bədi"}, {ar:"الباقي", tr:"Al-Baqi", ru:"Вечный", az:"Baqi"}, {ar:"الوارث", tr:"Al-Warith", ru:"Наследник", az:"Varis"}, {ar:"الرشيد", tr:"Ar-Rashid", ru:"Направляющий", az:"Rəşid"}, {ar:"الصبور", tr:"As-Sabur", ru:"Терпеливый", az:"Səbur"}
-];
-
-const ui = { AZ: { search: "Axtarış...", title: "Al-Qur’an", listen: "Dinlə", playing: "Oynayır" }, RU: { search: "Поиск...", title: "Коран", listen: "Слушать", playing: "Играет" } };
-let currentLang = 'RU', currentEdition = 'ru.kuliev', allSurahs = [];
+let allSurahs = [];
 const audio = new Audio();
 
-function updateSet(prop, val, txtId, txtVal) { document.documentElement.style.setProperty(prop, val); if(txtId) document.getElementById(txtId).innerText = txtVal; }
-function showPage(p, el) { 
+const namesList = [
+    {ar:"الرَّحْمَنُ", tr:"Ar-Rahman", ru:"Милостивый"}, {ar:"الرَّحِيمُ", tr:"Ar-Rahim", ru:"Милосердный"}, {ar:"الْمَلِكُ", tr:"Al-Malik", ru:"Царь"}, {ar:"الْقُدُّوسُ", tr:"Al-Quddus", ru:"Святой"}, {ar:"السَّلَامُ", tr:"As-Salam", ru:"Пречистый"}, {ar:"الْمُؤْمِنُ", tr:"Al-Mu'min", ru:"Оберегающий"}, {ar:"الْمُهَيْمِنُ", tr:"Al-Muhaymin", ru:"Хранитель"}, {ar:"الْعَزِيزُ", tr:"Al-Aziz", ru:"Могущественный"}
+];
+
+function showPage(p, el, title) {
     document.querySelectorAll('.page-sec, .nav-item').forEach(x => x.classList.remove('active'));
     document.getElementById(p + 'Sec').classList.add('active');
     el.classList.add('active');
-    document.getElementById('mainHeader').style.display = (p === 'settings') ? 'none' : 'block';
+    document.getElementById('pageTitle').innerText = title;
+    document.getElementById('surahSearch').style.display = (p === 'quran') ? 'block' : 'none';
 }
 
-async function initApp() {
+async function init() {
+    setTimeout(() => { document.getElementById('splash').style.opacity = '0'; setTimeout(()=>document.getElementById('splash').remove(), 800); }, 2000);
     const res = await fetch("https://api.alquran.cloud/v1/surah");
     const data = await res.json();
     allSurahs = data.data;
@@ -120,51 +127,65 @@ async function initApp() {
     renderNames();
 }
 
-function renderSurahs(data) {
-    document.getElementById('surahList').innerHTML = data.map(s => `
-        <div class="surah-item" onclick="openSurah(${s.number}, '${s.englishName}')">
-            <div class="surah-num">${s.number}</div>
-            <div class="surah-info"><span class="surah-name-en">${s.englishName}</span></div>
-            <div class="surah-name-ar">${s.name}</div>
+function renderSurahs(list) {
+    document.getElementById('surahList').innerHTML = list.map(s => `
+        <div class="item" onclick="openSurah(${s.number}, '${s.englishName}')">
+            <div class="num">${s.number}</div>
+            <div class="info"><b>${s.englishName}</b></div>
+            <div class="ar-name">${s.name}</div>
         </div>`).join('');
 }
 
 function renderNames() {
-    document.getElementById('namesList').innerHTML = namesData.map((n, i) => `
-        <div class="surah-item">
-            <div class="surah-num">${i+1}</div>
-            <div class="surah-info"><span class="surah-name-en">${n.tr}</span><br><small style="opacity:0.7">${currentLang==='RU'?n.ru:n.az}</small></div>
-            <div class="surah-name-ar">${n.ar}</div>
-        </div>`).join('');
+    document.getElementById('namesList').innerHTML = namesList.map((n, i) => `
+        <div class="item"><div class="num">${i+1}</div><div class="info"><b>${n.tr}</b><br><small>${n.ru}</small></div><div class="ar-name">${n.ar}</div></div>`).join('');
 }
 
 async function openSurah(id, name) {
-    const win = document.getElementById('surahWindow'); win.style.display = 'block';
-    document.getElementById('windowTitle').innerText = name;
-    const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,${currentEdition}`);
-    const result = await res.json();
-    document.getElementById('windowContainer').innerHTML = result.data[0].ayahs.map((a, i) => `
+    document.getElementById('surahWin').style.display = 'block';
+    document.getElementById('winTitle').innerText = name;
+    const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,ru.kuliev`);
+    const d = await res.json();
+    document.getElementById('winContent').innerHTML = d.data[0].ayahs.map((a, i) => `
         <div class="ayah-box">
-            <div class="arabic">${a.text}</div>
-            <div class="translation"><b>${i+1}.</b> ${result.data[1].ayahs[i].text}</div>
-            <button class="audio-btn" onclick="playAyah(${a.number}, this)"><span>▶</span> ${ui[currentLang].listen}</button>
+            <div class="ar-text">${a.text}</div>
+            <div class="ru-text"><b>${i+1}.</b> ${d.data[1].ayahs[i].text}</div>
+            <button class="audio-btn" onclick="playAudio(${a.number})">▶ Слушать</button>
         </div>`).join('');
 }
 
-function playAyah(num, btn) {
-    audio.pause();
-    document.querySelectorAll('.audio-btn').forEach(b => { b.classList.remove('playing'); b.innerHTML = `<span>▶</span> ${ui[currentLang].listen}`; });
-    audio.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${num}.mp3`;
-    btn.classList.add('playing'); btn.innerHTML = `<span>🔊</span> ${ui[currentLang].playing}`;
-    audio.play();
-    audio.onended = () => { btn.classList.remove('playing'); btn.innerHTML = `<span>▶</span> ${ui[currentLang].listen}`; };
+function playAudio(num) { audio.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${num}.mp3`; audio.play(); }
+function closeSurah() { document.getElementById('surahWin').style.display = 'none'; audio.pause(); }
+
+function filterSurahs() {
+    const q = document.getElementById('surahSearch').value.toLowerCase();
+    renderSurahs(allSurahs.filter(s => s.englishName.toLowerCase().includes(q) || s.number == q));
 }
 
-function closeSurah() { document.getElementById('surahWindow').style.display = 'none'; audio.pause(); }
-function setLang(ed, l) { currentEdition = ed; currentLang = l; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn' + l).classList.add('active'); document.getElementById('surahSearch').placeholder = ui[l].search; renderSurahs(allSurahs); renderNames(); }
-function filterSurahs() { const q = document.getElementById('surahSearch').value.toLowerCase(); renderSurahs(allSurahs.filter(s => s.englishName.toLowerCase().includes(q) || s.number.toString() === q)); }
-window.onload = initApp;
+function getGPS() {
+    const cityText = document.getElementById('cityName');
+    cityText.innerText = "Запрос доступа к GPS...";
+    
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+        cityText.innerText = "📍 Местоположение определено";
+        const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&method=3`);
+        const d = await res.json();
+        const t = d.data.timings;
+        const n = { Fajr: "Фаджр", Sunrise: "Восход", Dhuhr: "Зухр", Asr: "Аср", Maghrib: "Магриб", Isha: "Иша" };
+        
+        document.getElementById('hijriDate').innerText = `${d.data.date.hijri.day} ${d.data.date.hijri.month.en} ${d.data.date.hijri.year} AH`;
+        document.getElementById('prayerContent').innerHTML = Object.keys(n).map(k => `
+            <div class="prayer-row"><span>${n[k]}</span><span style="color:var(--gold)">${t[k]}</span></div>
+        `).join('');
+    }, (err) => {
+        cityText.innerText = "Ошибка: Разрешите доступ к GPS в настройках.";
+    });
+}
+
+init();
 </script>
 </body>
 </html>
+
+
 
