@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #000; --gold: #b2904f; --text: #eee; --fz: 32px; --lh: 2.0; --br: 100%; }
-        body.light { --bg: #fff; --text: #000; }
+        
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; overflow: hidden; }
 
@@ -66,7 +66,7 @@
     <div id="n_p" class="p"></div>
     <div id="s_p" class="p">
         <div class="card">
-            <div class="row"><span>Светлая тема</span><input type="checkbox" onchange="document.body.classList.toggle('light')"></div>
+            
             <div class="row"><span>Яркость</span><input type="range" min="30" max="100" value="100" oninput="document.documentElement.style.setProperty('--br', this.value+'%')"></div>
         </div>
         <div class="card">
