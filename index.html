@@ -169,20 +169,29 @@ async function openR(id, name) {
         ayahsData = data.data[0].ayahs;
         let tr = data.data[1].ayahs, taf = data.data[2].ayahs;
         let html = (id != 1 && id != 9) ? `<div class="art" style="text-align:center; color:var(--gold);">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰнِ ٱلرَّحِيمِ</div>` : "";
-        ayahsData.forEach((a, i) => {
-            const isSaved = bookmarks.some(b => b.id === `${id}_${i+1}`);
-            html += `
-            <div>
-                <div class="art" style="font-size:${curFont}px">${a.text} <span class="sup-num">${i+1}</span></div>
-                <div class="rut"><b>${i+1}.</b> ${tr[i].text}</div>
-                <div id="taf-${i}" class="taf-box"><b>Толкование:</b><br>${taf[i].text}</div>
-                <div class="btns-row">
-                    <button id="p-btn-${i}" class="btn-sm" onclick="togglePlay(${i})"><i class="fa fa-play"></i></button>
-                    <button class="btn-sm" onclick="togTaf(${i})"><i class="fa fa-book-open"></i></button>
-                    <button class="btn-sm ${isSaved ? 'active-bm' : ''}" onclick="toggleBM(this, ${id}, '${name}', ${i+1})"><i class="fa fa-bookmark"></i></button>
-                </div>
-            </div>`;
-        });
+   // Найди внутри функции openR цикл ayahsData.forEach и замени его на этот:
+ayahsData.forEach((a, i) => {
+    const isSaved = bookmarks.some(b => b.id === `${id}_${i+1}`);
+    html += `
+    <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+        <div class="art" style="font-size:${curFont}px">${a.text} <span class="sup-num">${i+1}</span></div>
+        <div class="rut"><b>${i+1}.</b> ${tr[i].text}</div>
+        <div id="taf-${i}" class="taf-box"><b>Толкование:</b><br>${taf[i].text}</div>
+        <div class="btns-row" style="flex-wrap: wrap;">
+            <button id="p-btn-${i}" class="btn-sm" onclick="togglePlay(${i})">
+                <i class="fa fa-play"></i> <span>Слушать</span>
+            </button>
+            <button class="btn-sm" onclick="togTaf(${i})">
+                <i class="fa fa-book-open"></i> <span>Тафсир</span>
+            </button>
+            <button class="btn-sm ${isSaved ? 'active-bm' : ''}" onclick="toggleBM(this, ${id}, '${name}', ${i+1})">
+                <i class="fa fa-bookmark"></i> <span>${isSaved ? 'В закладках' : 'В закладки'}</span>
+            </button>
+        </div>
+    </div>`;
+});
+
+        
         document.getElementById('wc').innerHTML = html;
     } catch(e) { document.getElementById('wc').innerHTML = "<center style='padding:20px'>Ошибка сети при загрузке суры!</center>"; }
 }
