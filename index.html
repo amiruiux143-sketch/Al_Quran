@@ -26,8 +26,8 @@
         .sup-num { color: var(--gold); font-size: 18px; margin-left: 8px; border: 1px solid #eee; border-radius: 50%; padding: 0 8px; font-family: sans-serif; }
         .rut { font-size: 16px; color: #555; padding: 0 15px 15px; border-left: 3px solid var(--gold); margin: 5px 15px 10px; }
         .taf-box { display: none; background: #f0f4f8; padding: 15px; border-radius: 10px; font-size: 14px; margin: 0 15px 15px; border-left: 4px solid var(--blue); line-height: 1.6; }
-        .btns-row { display: flex; gap: 8px; padding: 0 15px 30px; }
-        .btn-sm { background: #fdfdfd; color: #555; border: 1px solid #e0e0e0; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+        .btns-row { display: flex; gap: 8px; padding: 0 15px 30px; flex-wrap: wrap; }
+        .btn-sm { background: #fdfdfd; color: #555; border: 1px solid #e0e0e0; padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
         .btn-sm.playing { background: var(--red); color: #fff; border-color: var(--red); }
         .btn-sm.active-bm { color: var(--red); border-color: var(--red); }
         nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; z-index: 3000; }
@@ -38,7 +38,7 @@
 </head>
 <body>
 
-<header><div id="tit">Al Quran</div></header>
+<header><div id="tit">Al Quran Pro</div></header>
 
 <main>
     <div id="m_p" class="p active">
@@ -50,28 +50,15 @@
             <div class="card" onclick="tab('s')" style="grid-column: span 2;"><i class="fa-solid fa-sliders"></i><b>Настройки</b></div>
         </div>
     </div>
-
-    <div id="q_p" class="p">
-        <input type="text" id="search" class="search-box" placeholder="Поиск суры..." onkeyup="filterSurahs()">
-        <div id="surahList"></div>
-    </div>
-
-    <div id="b_p" class="p"><h3 style="text-align:center">Мои закладки</h3><div id="bookmarksList"></div></div>
+    <div id="q_p" class="p"><input type="text" id="search" class="search-box" placeholder="Поиск суры..." onkeyup="filterSurahs()"><div id="surahList"></div></div>
+    <div id="b_p" class="p"><h3 style="text-align:center">Закладки</h3><div id="bookmarksList"></div></div>
     <div id="n_p" class="p"><div id="namesList"></div></div>
-    <div id="h_p" class="p"><h3 style="text-align:center">Мудрость Сунны</h3><div id="hadithList"></div><center><button class="btn-sm" onclick="loadHadiths()" style="margin-top:20px; background:var(--gold); color:#fff; border:none;">Еще хадис</button></center></div>
-    
-    <div id="s_p" class="p">
-        <div style="background:#fff; padding:20px; border-radius:15px;">
-            <h3>Опции</h3>
-            <p>Размер текста:</p>
-            <input type="range" min="20" max="55" value="30" style="width:100%" oninput="updateFont(this.value)">
-            <p style="margin-top:20px">Разработчик: <b>@kyfax</b></p>
-        </div>
-    </div>
+    <div id="h_p" class="p"><h3 style="text-align:center">Мудрость Сунны</h3><div id="hadithList"></div><center><button class="btn-sm" onclick="loadHadiths()" style="margin-top:20px; background:var(--gold); color:#fff; border:none; padding:12px 20px">Обновить хадисы</button></center></div>
+    <div id="s_p" class="p"><div style="background:#fff; padding:20px; border-radius:15px;"><h3>Настройки</h3><p>Размер текста:</p><input type="range" min="20" max="55" value="30" style="width:100%" oninput="updateFont(this.value)"><p style="margin-top:20px">Разработчик: <b>@kyfax</b></p></div></div>
 </main>
 
 <div id="reader" class="win">
-    <div class="win-head"><i class="fa fa-arrow-left" onclick="closeR()" style="font-size:22px; color:var(--gold)"></i><b id="wt"></b><div style="width:22px;"></div></div>
+    <div class="win-head"><i class="fa fa-arrow-left" onclick="closeR()" style="font-size:22px; color:var(--gold); cursor:pointer"></i><b id="wt"></b><div style="width:22px;"></div></div>
     <div id="wc"></div>
 </div>
 
@@ -85,16 +72,18 @@
 let aud = new Audio(), curFont = 30, allSurahs = [], currentAyahIdx = -1, ayahsData = [];
 let bookmarks = JSON.parse(localStorage.getItem('q_bookmarks')) || [];
 
+const ruSurahNames = ["Аль-Фатиха","Аль-Бакара","Али Имран","Ан-Ниса","Аль-Маида","Аль-Анам","Аль-Араф","Аль-Анфаль","Ат-Тауба","Юнус","Худ","Юсуф","Ар-Раад","Ибрахим","Аль-Хиджр","Ан-Нахль","Аль-Исра","Аль-Кахф","Марьям","Та Ха","Аль-Анбия","Аль-Хадж","Аль-Муминун","Ан-Нур","Аль-Фуркан","Аш-Шуара","Ан-Намль","Аль-Касас","Аль-Анкабут","Ар-Рум","Лукман","Ас-Сажда","Аль-Ахзаб","Саба","Фатыр","Ясин","Ас-Саффат","Сад","Аз-Зумар","Гафир","Фуссылат","Аш-Шура","Аз-Зухруф","Ад-Духан","Аль-Джасия","Аль-Ахкаф","Мухаммад","Аль-Фатх","Аль-Худжурат","Каф","Ад-Зарийят","Ат-Тур","Ан-Наджм","Аль-Камар","Ар-Рахман","Аль-Вакиа","Аль-Хадид","Аль-Муджадила","Аль-Хашр","Аль-Мумтахана","Ас-Сафф","Аль-Джумуа","Аль-Мунафикун","Ат-Тагабун","Ат-Тялак","Ат-Тахрим","Аль-Мульк","Аль-Калям","Аль-Хакка","Аль-Мааридж","Нух","Аль-Джинн","Аль-Муззаммиль","Аль-Муддассир","Аль-Кыйяма","Аль-Инсан","Аль-Мурсалят","Ан-Наба","Ан-Назиат","Абаса","Ат-Таквир","Аль-Инфитар","Аль-Мутаффифин","Аль-Иншикак","Аль-Бурудж","Ат-Тарик","Аль-Аля","Аль-Гашия","Аль-Фаджр","Аль-Баляд","Аш-Шамс","Аль-Лайл","Ад-Духа","Аш-Шарх","Ат-Тин","Аль-Аляк","Аль-Кадр","Аль-Байина","Аз-Залзаля","Аль-Адият","Аль-Кариа","Ат-Такасур","Аль-Аср","Аль-Хумаза","Аль-Филь","Курайш","Аль-Маун","Аль-Каусар","Аль-Кафирун","Ан-Наср","Аль-Масад","Аль-Ихляс","Аль-Фаляк","Ан-Нас"];
+
 const namesData = [
-    {a:"الرَّحْمَنُ",t:"Ар-Рахман",r:"Милостивый"},{a:"الرَّحِيمُ",t:"Ар-Рахим",r:"Милосердный"},{a:"الْمَلِكُ",t:"Аль-Малик",r:"Царь"},{a:"الْقُدُّوسُ",t:"Аль-Куддус",r:"Святой"},{a:"السَّلَامُ",t:"Ас-Салям",r:"Пречистый"},{a:"الْمУؤْمِنُ",t:"Аль-Мумин",r:"Оберегающий"},{a:"الْمُهَيْمِنُ",t:"Аль-Мухаймин",r:"Хранитель"},{a:"الْعَزِيزُ",t:"Аль-Азиз",r:"Могущественный"},{a:"الْجَبَّارُ",t:"Аль-Джаббар",r:"Могучий"},{a:"الْمُتَكَبِّرُ",t:"Аль-Мутакаббир",r:"Гордый"},
-    {a:"الْخَالِقُ",t:"Аль-Халик",r:"Творец"},{a:"الْبَارِئُ",t:"Аль-Бари",r:"Создатель"},{a:"الْمُصَوِّرُ",t:"Аль-Мусаввир",r:"Дарующий облик"},{a:"الْغَفَّارُ",t:"Аль-Гаффар",r:"Прощающий"},{a:"الْقَهَّارُ",t:"Аль-Каххар",r:"Господствующий"},{a:"الْمُوَهَّابُ",t:"Аль-Ваххаб",r:"Дарующий"},{a:"الرَّЗَّاقُ",t:"Ар-Раззак",r:"Наделяющий"},{a:"الْفَتَّاحُ",t:"Аль-Фаттах",r:"Раскрывающий"},{a:"الْعَلِيمُ",t:"Аль-Алим",r:"Всезнающий"},{a:"الْقَابِضُ",t:"Аль-Кабид",r:"Сжимающий"},
-    {a:"الْبَاسِطُ",t:"Аль-Басит",r:"Расширяющий"},{a:"الْخَافِضُ",t:"Аль-Хафид",r:"Унижающий"},{a:"الرَّافِعُ",t:"Ар-Рафи",r:"Возвышающий"},{a:"الْمُعِزُّ",t:"Аль-Муизз",r:"Возвеличивающий"},{a:"الْمُذِلُّ",t:"Аль-Музилл",r:"Унижающий"},{a:"السَّМِيعُ",t:"Ас-Сами",r:"Слышащий"},{a:"الْبَصِيرُ",t:"Аль-Басир",r:"Видящий"},{a:"الْحَكَمُ",t:"Аль-Хакам",r:"Судья"},{a:"الْعَدْلُ",t:"Аль-Адль",r:"Справедливый"},{a:"اللَّطِيفُ",t:"Аль-Латиф",r:"Добр"},
-    {a:"الْخَبِيرُ",t:"Аль-Хабир",r:"Сведущий"},{a:"الْحَلِيمُ",t:"Аль-Халим",r:"Снисходительный"},{a:"الْعَظِيمُ",t:"Аль-Азым",r:"Великий"},{a:"الْغَفُورُ",t:"Аль-Гафур",r:"Прощающий"},{a:"الشَّكُورُ",t:"Аш-Шакур",r:"Благодарный"},{a:"الْعَلِيُّ",t:"Аль-Али",r:"Высокий"},{a:"الْкَبِيرُ",t:"Аль-Кабир",r:"Великий"},{a:"الْحَفِيظُ",t:"Аль-Хафиз",r:"Хранитель"},{a:"الْمُقИТُ",t:"Аль-Мукит",r:"Питающий"},{a:"الْحَسِيبُ",t:"Аль-Хасиб",r:"Считающий"},
-    {a:"الْجَلِيلُ",t:"Аль-Джалиль",r:"Величественный"},{a:"الْкЕРÍМُ",t:"Аль-Карим",r:"Щедрый"},{a:"الرَّقِيبُ",t:"Ар-Ракиб",r:"Следящий"},{a:"الْمُجِيبُ",t:"Аль-Муджиб",r:"Отзывчивый"},{a:"الْوَاسِعُ",t:"Аль-Васи",r:"Объемлющий"},{a:"الْحَкИМُ",t:"Аль-Хаким",r:"Мудрый"},{a:"الْوَدُودُ",t:"Аль-Вадуд",r:"Любящий"},{a:"الْمَجِيدُ",t:"Аль-Маджид",r:"Славный"},{a:"الْبَاعِثُ",t:"Аль-Баис",r:"Воскрешающий"},{a:"الشَّهِيدُ",t:"Аш-Шахид",r:"Свидетель"},
-    {a:"الْحَقُّ",t:"Аль-Хакк",r:"Истина"},{a:"الْوَкِيلُ",t:"Аль-Вакиль",r:"Попечитель"},{a:"الْقَوِيُّ",t:"Аль-Кави",r:"Сильный"},{a:"الْمَتِينُ",t:"Аль-Матин",r:"Прочный"},{a:"الْوَلِيُّ",t:"Аль-Вали",r:"Покровитель"},{a:"الْحَمِيدُ",t:"Аль-Хамид",r:"Достохвальный"},{a:"الْمُحْصِي",t:"Аль-Мухси",r:"Учитывающий"},{a:"الْمُبْدِئُ",t:"Аль-Мубди",r:"Начинающий"},{a:"الْمُعِيدُ",t:"Аль-Муид",r:"Возвращающий"},{a:"الْمُحْيِي",t:"Аль-Мухйи",r:"Оживляющий"},
+    {a:"الرَّحْمَنُ",t:"Ар-Рахман",r:"Милостивый"},{a:"الرَّحِيمُ",t:"Ар-Рахим",r:"Милосердный"},{a:"الْمَلِكُ",t:"Аль-Малик",r:"Царь"},{a:"الْقُدُّوسُ",t:"Аль-Куддус",r:"Святой"},{a:"السَّلَامُ",t:"Ас-Салям",r:"Пречистый"},{a:"الْمُؤْمِنُ",t:"Аль-Мумин",r:"Оберегающий"},{a:"الْمُهَيْمِنُ",t:"Аль-Мухаймин",r:"Хранитель"},{a:"الْعَزِيزُ",t:"Аль-Азиз",r:"Могущественный"},{a:"الْجَبَّارُ",t:"Аль-Джаббар",r:"Могучий"},{a:"الْمُتَكَبِّرُ",t:"Аль-Мутакаббир",r:"Гордый"},
+    {a:"الْخَالِقُ",t:"Аль-Халик",r:"Творец"},{a:"الْبَارِئُ",t:"Аль-Бари",r:"Создатель"},{a:"الْمُصَوِّرُ",t:"Аль-Мусаввир",r:"Дарующий облик"},{a:"الْغَفَّارُ",t:"Аль-Гаффар",r:"Прощающий"},{a:"الْقَهَّارُ",t:"Аль-Каххар",r:"Господствующий"},{a:"الْمُوَهَّابُ",t:"Аль-Ваххаб",r:"Дарующий"},{a:"الرَّزَّاقُ",t:"Ар-Раззак",r:"Наделяющий"},{a:"الْفَتَّاحُ",t:"Аль-Фаттах",r:"Раскрывающий"},{a:"الْعَلِيمُ",t:"Аль-Алим",r:"Всезнающий"},{a:"الْقَابِضُ",t:"Аль-Кабид",r:"Сжимающий"},
+    {a:"الْبَاسِطُ",t:"Аль-Басит",r:"Расширяющий"},{a:"الْخَافِضُ",t:"Аль-Хафид",r:"Унижающий"},{a:"الرَّافِعُ",t:"Ар-Рафи",r:"Возвышающий"},{a:"الْمُعِزُّ",t:"Аль-Муизз",r:"Возвеличивающий"},{a:"الْمُذِلُّ",t:"Аль-Музилл",r:"Унижающий"},{a:"السَّمِيعُ",t:"Ас-Сами",r:"Слышащий"},{a:"الْبَصِيرُ",t:"Аль-Басир",r:"Видящий"},{a:"الْحَكَمُ",t:"Аль-Хакам",r:"Судья"},{a:"الْعَدْلُ",t:"Аль-Адль",r:"Справедливый"},{a:"اللَّطِيفُ",t:"Аль-Латиф",r:"Добр"},
+    {a:"الْخَبِيرُ",t:"Аль-Хабир",r:"Сведущий"},{a:"الْحَلِيمُ",t:"Аль-Халим",r:"Снисходительный"},{a:"الْعَظِيمُ",t:"Аль-Азым",r:"Великий"},{a:"الْغَفُورُ",t:"Аль-Гафур",r:"Прощающий"},{a:"الشَّكُورُ",t:"Аш-Шакур",r:"Благодарный"},{a:"الْعَلِيُّ",t:"Аль-Али",r:"Высокий"},{a:"الْكَبِيرُ",t:"Аль-Кабир",r:"Великий"},{a:"الْحَفِيظُ",t:"Аль-Хафиз",r:"Хранитель"},{a:"الْمُقِيتُ",t:"Аль-Мукит",r:"Питающий"},{a:"الْحَسِيبُ",t:"Аль-Хасиб",r:"Считающий"},
+    {a:"الْجَلِيلُ",t:"Аль-Джалиль",r:"Величественный"},{a:"الْكَرِيمُ",t:"Аль-Карим",r:"Щедрый"},{a:"الرَّقِيبُ",t:"Ар-Ракиб",r:"Следящий"},{a:"الْمُجِيبُ",t:"Аль-Муджиб",r:"Отзывчивый"},{a:"الْوَاسِعُ",t:"Аль-Васи",r:"Объемлющий"},{a:"الْحَكِيمُ",t:"Аль-Хаким",r:"Мудрый"},{a:"الْوَدُودُ",t:"Аль-Вадуд",r:"Любящий"},{a:"الْمَجِيدُ",t:"Аль-Маджид",r:"Славный"},{a:"الْبَاعِثُ",t:"Аль-Баис",r:"Воскрешающий"},{a:"الشَّهِيدُ",t:"Аш-Шахид",r:"Свидетель"},
+    {a:"الْحَقُّ",t:"Аль-Хакк",r:"Истина"},{a:"الْوَكِيلُ",t:"Аль-Вакиль",r:"Попечитель"},{a:"الْقَوِيُّ",t:"Аль-Кави",r:"Сильный"},{a:"الْمَتِينُ",t:"Аль-Матин",r:"Прочный"},{a:"الْوَلِيُّ",t:"Аль-Вали",r:"Покровитель"},{a:"الْحَمِيدُ",t:"Аль-Хамид",r:"Достохвальный"},{a:"الْمُحْصِي",t:"Аль-Мухси",r:"Учитывающий"},{a:"الْمُبْدِئُ",t:"Аль-Мубди",r:"Начинающий"},{a:"الْمُعِيدُ",t:"Аль-Муид",r:"Возвращающий"},{a:"الْمُحْيِي",t:"Аль-Мухйи",r:"Оживляющий"},
     {a:"الْمُمِيتُ",t:"Аль-Мумит",r:"Умерщвляющий"},{a:"الْحَيُّ",t:"Аль-Хай",r:"Живой"},{a:"الْقَيُّومُ",t:"Аль-Кайюм",r:"Самосущий"},{a:"الْوَاجِدُ",t:"Аль-Ваджид",r:"Находящий"},{a:"الْمَاجِدُ",t:"Аль-Маджид",r:"Славный"},{a:"الْوَاحِدُ",t:"Аль-Вахид",r:"Единственный"},{a:"الأَحَدُ",t:"Аль-Ахад",r:"Единый"},{a:"الصَّمَدُ",t:"Ас-Самад",r:"Самодостаточный"},{a:"الْقَادِرُ",t:"Аль-Кадир",r:"Могучий"},{a:"الْمُقْتَدِرُ",t:"Аль-Муктадир",r:"Всемогущий"},
-    {a:"الْمُقَدِّمُ",t:"Аль-Мукаддим",r:"Приближающий"},{a:"الْمُؤَخِّрُ",t:"Аль-Муаххир",r:"Отдаляющий"},{a:"الأَوَّلُ",t:"Аль-Авваль",r:"Первый"},{a:"الآخِرُ",t:"Аль-Ахир",r:"Последний"},{a:"الظَّاهِرُ",t:"Аз-Захир",r:"Явный"},{a:"الْبَاطِنُ",t:"Аль-Батин",r:"Скрытый"},{a:"الْوَالِي",t:"Аль-Вали",r:"Правящий"},{a:"الْمُتَعَالِي",t:"Аль-Мутаали",r:"Превознесенный"},{a:"الْبَرُّ",t:"Аль-Барр",r:"Благостный"},{a:"التَّوَّابُ",t:"Ат-Тавваб",r:"Принимающий"},
-    {a:"الْمُنْتَقِمُ",t:"Аль-Мунтаким",r:"Мстящий"},{a:"الْعَفُوُّ",t:"Аль-Афувв",r:"Прощающий"},{a:"الرَّؤُوفُ",t:"Ар-Рауф",r:"Сострадательный"},{a:"مَالِкُ الْمُلْكِ",t:"Малику-ль-Мульк",r:"Царь царства"},{a:"ذُو الْجَلَالِ وَالإِكْرَامِ",t:"Зуль-Джаляль",r:"Обладатель величия"},{a:"الْمُقْسِطُ",t:"Аль-Муксит",r:"Справедливый"},{a:"الْجَامِعُ",t:"Аль-Джами",r:"Собирающий"},{a:"الْغَنِيُّ",t:"Аль-Гани",r:"Богатый"},{a:"الْمُغْنِي",t:"Аль-Мугни",r:"Обогащающий"},{a:"الْمَانِعُ",t:"Аль-Мани",r:"Удерживающий"},
+    {a:"الْمُقَدِّمُ",t:"Аль-Мукаддим",r:"Приближающий"},{a:"الْمُؤَخِّرُ",t:"Аль-Муаххир",r:"Отдаляющий"},{a:"الأَوَّلُ",t:"Аль-Авваль",r:"Первый"},{a:"الآخِرُ",t:"Аль-Ахир",r:"Последний"},{a:"الظَّاهِرُ",t:"Аз-Захир",r:"Явный"},{a:"الْبَاطِنُ",t:"Аль-Батин",r:"Скрытый"},{a:"الْوَالِي",t:"Аль-Вали",r:"Правящий"},{a:"الْمُتَعَالِي",t:"Аль-Мутаали",r:"Превознесенный"},{a:"الْبَرُّ",t:"Аль-Барр",r:"Благостный"},{a:"التَّوَّابُ",t:"Ат-Тавваб",r:"Принимающий"},
+    {a:"الْمُنْتَقِمُ",t:"Аль-Мунтаким",r:"Мстящий"},{a:"الْعَفُوُّ",t:"Аль-Афувв",r:"Прощающий"},{a:"الرَّؤُوفُ",t:"Ар-Рауф",r:"Сострадательный"},{a:"مَالِكُ الْمُلْكِ",t:"Малику-ль-Мульк",r:"Царь царства"},{a:"ذُو الْجَلَالِ وَالإِكْرَامِ",t:"Зуль-Джаляль",r:"Обладатель величия"},{a:"الْمُقْسِطُ",t:"Аль-Муксит",r:"Справедливый"},{a:"الْجَامِعُ",t:"Аль-Джами",r:"Собирающий"},{a:"الْغَنِيُّ",t:"Аль-Гани",r:"Богатый"},{a:"الْمُغْنِي",t:"Аль-Мугни",r:"Обогащающий"},{a:"الْمَانِعُ",t:"Аль-Мани",r:"Удерживающий"},
     {a:"الضَّارُّ",t:"Ад-Дарр",r:"Вредящий"},{a:"النَّافِعُ",t:"Ан-Нафи",r:"Благотворящий"},{a:"النُّورُ",t:"Ан-Нур",r:"Свет"},{a:"الْهَادِي",t:"Аль-Хади",r:"Наставляющий"},{a:"الْبَدِيعُ",t:"Аль-Бади",r:"Творец"},{a:"الْبَاقِي",t:"Аль-Баки",r:"Вечный"},{a:"الْوَارِثُ",t:"Аль-Варис",r:"Наследник"},{a:"الرَّشِيدُ",t:"Ар-Рашид",r:"Правильный"},{a:"الصَّبُورُ",t:"Ас-Сабур",r:"Терпеливый"}
 ];
 
@@ -111,52 +100,12 @@ const offlineHadiths = [
     {text: "Довольство Господа — в довольстве родителей.", source: "Ат-Тирмизи"}
 ];
 
-const ruSurahNames = ["Аль-Фатиха","Аль-Бакара","Али Имран","Ан-Ниса","Аль-Маида","Аль-Анам","Аль-Араф","Аль-Анфаль","Ат-Тауба","Юнус","Худ","Юсуф","Ар-Раад","Ибрахим","Аль-Хиджр","Ан-Нахль","Аль-Исра","Аль-Кахф","Марьям","Та Ха","Аль-Анбия","Аль-Хадж","Аль-Муминун","Ан-Нур","Аль-Фуркан","Аш-Шуара","Ан-Намль","Аль-Касас","Аль-Анкабут","Ар-Рум","Лукман","Ас-Сажда","Аль-Ахзаб","Саба","Фатыр","Ясин","Ас-Саффат","Сад","Аз-Зумар","Гафир","Фуссылат","Аш-Шура","Аз-Зухруф","Ад-Духан","Аль-Джасия","Аль-Ахкаф","Мухаммад","Аль-Фатх","Аль-Худжурат","Каф","Ад-Зарийят","Ат-Тур","Ан-Наджм","Аль-Камар","Ар-Рахман","Аль-Вакиа","Аль-Хадид","Аль-Муджадила","Аль-Хашр","Аль-Мумтахана","Ас-Сафф","Аль-Джумуа","Аль-Мунафикун","Ат-Тагабун","Ат-Таляк","Ат-Тахрим","Аль-Мульк","Аль-Калям","Аль-Хакка","Аль-Мааридж","Нух","Аль-Джинн","Аль-Муззаммиль","Аль-Муддассир","Аль-Кыйяма","Аль-Инсан","Аль-Мурсалят","Ан-Наба","Ан-Назиат","Абаса","Ат-Таквир","Аль-Инфитар","Аль-Мутаффифин","Аль-Иншикак","Аль-Бурудж","Ат-Тарик","Аль-Аля","Аль-Гашия","Аль-Фаджр","Аль-Баляд","Аш-Шамс","Аль-Лайл","Ад-Духа","Аш-Шарх","Ат-Тин","Аль-Аляк","Аль-Кадр","Аль-Байина","Аз-Залзаля","Аль-Адият","Аль-Кариа","Ат-Такасур","Аль-Аср","Аль-Хумаза","Аль-Филь","Курайш","Аль-Маун","Аль-Каусар","Аль-Кафирун","Ан-Наср","Аль-Масад","Аль-Ихляс","Аль-Фаляк","Ан-Нас"];
-
 function tab(p) {
     document.querySelectorAll('.p, .nav-btn').forEach(x => x.classList.remove('active'));
     document.getElementById(p+'_p').classList.add('active');
     let b = document.querySelector(`[data-tab="${p}"]`);
     if(b) b.classList.add('active');
     if(p === 'h') loadHadiths();
-}
-
-function filterSurahs() {
-    let val = document.getElementById('search').value.toLowerCase();
-    const filtered = allSurahs.filter((s) => ruSurahNames[s.number-1].toLowerCase().includes(val));
-    document.getElementById('surahList').innerHTML = filtered.map(s => `
-        <div class="list-item" onclick="openR(${s.number}, '${ruSurahNames[s.number-1]}')">
-            <b>${s.number}. ${ruSurahNames[s.number-1]}</b>
-            <span style="font-family:'Amiri'; color:var(--gold); font-size:18px;">${s.name}</span>
-        </div>`).join('');
-}
-
-function toggleBM(btn, sId, sName, aNum) {
-    const bId = `${sId}_${aNum}`;
-    const idx = bookmarks.findIndex(b => b.id === bId);
-    if (idx === -1) {
-        bookmarks.push({ id: bId, sId, sName, aNum });
-        btn.classList.add('active-bm');
-    } else {
-        bookmarks.splice(idx, 1);
-        btn.classList.remove('active-bm');
-    }
-    localStorage.setItem('q_bookmarks', JSON.stringify(bookmarks));
-}
-
-function showBM() {
-    tab('b');
-    const list = document.getElementById('bookmarksList');
-    list.innerHTML = bookmarks.length ? bookmarks.map(b => `
-        <div class="list-item" onclick="openR(${b.sId}, '${b.sName}')">
-            <b>${b.sName} (аят ${b.aNum})</b> <i class="fa fa-chevron-right"></i>
-        </div>`).join('') : "<center style='padding:40px'>Нет закладок</center>";
-}
-
-function loadHadiths() {
-    const l = document.getElementById('hadithList');
-    let hads = [...offlineHadiths].sort(() => 0.5 - Math.random()).slice(0, 4);
-    l.innerHTML = hads.map(h => `<div class="list-item" style="display:block"><b>«${h.text}»</b><br><small style="color:var(--gold)">— ${h.source}</small></div>`).join('');
 }
 
 async function openR(id, name) {
@@ -168,63 +117,69 @@ async function openR(id, name) {
         const data = await res.json();
         ayahsData = data.data[0].ayahs;
         let tr = data.data[1].ayahs, taf = data.data[2].ayahs;
-        let html = (id != 1 && id != 9) ? `<div class="art" style="text-align:center; color:var(--gold);">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰнِ ٱلرَّحِيمِ</div>` : "";
-   // Найди внутри функции openR цикл ayahsData.forEach и замени его на этот:
-ayahsData.forEach((a, i) => {
-    const isSaved = bookmarks.some(b => b.id === `${id}_${i+1}`);
-    html += `
-    <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-        <div class="art" style="font-size:${curFont}px">${a.text} <span class="sup-num">${i+1}</span></div>
-        <div class="rut"><b>${i+1}.</b> ${tr[i].text}</div>
-        <div id="taf-${i}" class="taf-box"><b>Толкование:</b><br>${taf[i].text}</div>
-        <div class="btns-row" style="flex-wrap: wrap;">
-            <button id="p-btn-${i}" class="btn-sm" onclick="togglePlay(${i})">
-                <i class="fa fa-play"></i> <span>Слушать</span>
-            </button>
-            <button class="btn-sm" onclick="togTaf(${i})">
-                <i class="fa fa-book-open"></i> <span>Тафсир</span>
-            </button>
-            <button class="btn-sm ${isSaved ? 'active-bm' : ''}" onclick="toggleBM(this, ${id}, '${name}', ${i+1})">
-                <i class="fa fa-bookmark"></i> <span>${isSaved ? 'В закладках' : 'В закладки'}</span>
-            </button>
-        </div>
-    </div>`;
-});
-
         
+        let html = (id != 1 && id != 9) ? `<div class="art" style="text-align:center; color:var(--gold); padding: 20px 0;">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>` : "";
+
+        ayahsData.forEach((a, i) => {
+            let text = a.text;
+            if (i === 0 && id != 1 && id != 9) {
+                let w = text.split(' '); if (w.length > 4) text = w.slice(4).join(' ');
+            }
+            const isSaved = bookmarks.some(b => b.id === `${id}_${i+1}`);
+            html += `
+            <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                <div class="art" style="font-size:${curFont}px">${text} <span class="sup-num">${i+1}</span></div>
+                <div class="rut"><b>${i+1}.</b> ${tr[i].text}</div>
+                <div id="taf-${i}" class="taf-box"><b>Толкование:</b><br>${taf[i].text}</div>
+                <div class="btns-row">
+                    <button id="p-btn-${i}" class="btn-sm" onclick="togglePlay(${i})"><i class="fa fa-play"></i> Слушать</button>
+                    <button class="btn-sm" onclick="togTaf(${i})"><i class="fa fa-book-open"></i> Тафсир</button>
+                    <button class="btn-sm ${isSaved?'active-bm':''}" onclick="toggleBM(this,${id},'${name}',${i+1})"><i class="fa fa-bookmark"></i> ${isSaved?'Удалить':'Закладка'}</button>
+                </div>
+            </div>`;
+        });
         document.getElementById('wc').innerHTML = html;
-    } catch(e) { document.getElementById('wc').innerHTML = "<center style='padding:20px'>Ошибка сети при загрузке суры!</center>"; }
+    } catch(e) { document.getElementById('wc').innerHTML = "<center>Ошибка!</center>"; }
 }
 
-function togTaf(i) { let t = document.getElementById(`taf-${i}`); t.style.display = t.style.display === 'block' ? 'none' : 'block'; }
+function toggleBM(btn, sId, sName, aNum) {
+    const bId = `${sId}_${aNum}`;
+    const idx = bookmarks.findIndex(b => b.id === bId);
+    if(idx===-1){bookmarks.push({id:bId,sId,sName,aNum});btn.classList.add('active-bm');btn.innerHTML='<i class="fa fa-bookmark"></i> Удалить';}
+    else{bookmarks.splice(idx,1);btn.classList.remove('active-bm');btn.innerHTML='<i class="fa fa-bookmark"></i> Закладка';}
+    localStorage.setItem('q_bookmarks', JSON.stringify(bookmarks));
+}
+
+function showBM() {
+    tab('b');
+    document.getElementById('bookmarksList').innerHTML = bookmarks.length ? bookmarks.map(b => `<div class="list-item" onclick="openR(${b.sId},'${b.sName}')"><b>${b.sName} (${b.aNum})</b><i class="fa fa-chevron-right"></i></div>`).join('') : "<center style='padding:40px'>У вас пока нет закладок</center>";
+}
+
+function loadHadiths() {
+    const l = document.getElementById('hadithList');
+    let hads = [...offlineHadiths].sort(() => 0.5 - Math.random()).slice(0, 4);
+    l.innerHTML = hads.map(h => `<div class="list-item" style="display:block"><b>«${h.text}»</b><br><small style="color:var(--gold)">— ${h.source}</small></div>`).join('');
+}
+
 function togglePlay(i) {
     let b = document.getElementById(`p-btn-${i}`);
     if (currentAyahIdx === i && !aud.paused) { stopAll(); }
-    else {
-        stopAll(); currentAyahIdx = i; b.classList.add('playing'); b.innerHTML = "<i class='fa fa-stop'></i>";
-        aud.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayahsData[i].number}.mp3`;
-        aud.play();
-    }
+    else { stopAll(); currentAyahIdx = i; b.classList.add('playing'); b.innerHTML = "<i class='fa fa-stop'></i> Стоп"; aud.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayahsData[i].number}.mp3`; aud.play(); aud.onended = () => togglePlay(i+1); }
 }
-function stopAll() {
-    aud.pause(); document.querySelectorAll('.btn-sm').forEach(b => {
-        b.classList.remove('playing'); if(b.id?.startsWith('p-btn-')) b.innerHTML = "<i class='fa fa-play'></i>";
-    });
-}
+
+function stopAll() { aud.pause(); document.querySelectorAll('.btn-sm').forEach(b => { b.classList.remove('playing'); if(b.id?.startsWith('p-btn-')) b.innerHTML = "<i class='fa fa-play'></i> Слушать"; }); }
 function closeR() { stopAll(); document.getElementById('reader').style.display='none'; }
+function togTaf(i) { let t = document.getElementById(`taf-${i}`); t.style.display = t.style.display === 'block' ? 'none' : 'block'; }
 function updateFont(v) { curFont = v; document.querySelectorAll('.art').forEach(e => e.style.fontSize = v + 'px'); }
 
+function filterSurahs() {
+    let v = document.getElementById('search').value.toLowerCase();
+    document.getElementById('surahList').innerHTML = allSurahs.filter(s => ruSurahNames[s.number-1].toLowerCase().includes(v)).map(s => `<div class="list-item" onclick="openR(${s.number},'${ruSurahNames[s.number-1]}')"><b>${s.number}. ${ruSurahNames[s.number-1]}</b><span class="art" style="font-size:18px; color:var(--gold)">${s.name}</span></div>`).join('');
+}
+
 window.onload = () => {
-    document.getElementById('namesList').innerHTML = namesData.map((n, i) => `<div class="list-item"><div><b>${i+1}. ${n.t}</b><br><small>${n.r}</small></div><span class="art" style="font-size:22px; color:var(--gold);">${n.a}</span></div>`).join('');
-    fetch("https://api.alquran.cloud/v1/surah").then(r => r.json()).then(d => {
-        allSurahs = d.data;
-        document.getElementById('surahList').innerHTML = allSurahs.map(s => `
-            <div class="list-item" onclick="openR(${s.number}, '${ruSurahNames[s.number-1]}')">
-                <b>${s.number}. ${ruSurahNames[s.number-1]}</b>
-                <span style="font-family:'Amiri'; color:var(--gold); font-size:18px;">${s.name}</span>
-            </div>`).join('');
-    });
-    loadHadiths();
+    fetch("https://api.alquran.cloud/v1/surah").then(r => r.json()).then(d => { allSurahs = d.data; filterSurahs(); });
+    document.getElementById('namesList').innerHTML = namesData.map((n, i) => `<div class="list-item"><div><b>${i+1}. ${n.t}</b><br><small>${n.r}</small></div><span class="art" style="font-size:22px; color:var(--gold)">${n.a}</span></div>`).join('');
 };
 </script>
 </body>
