@@ -3,218 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Al-Qur'an Mobile Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <title>Коран и Сунна Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --bg: #000; --gold: #b2904f; --text: #eee; --fz: 32px; --lh: 2.0; --br: 100%; }
-        
+        :root { --bg: #f8f9fa; --gold: #b2904f; --accent: #2c3e50; --fz: 30px; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; overflow: hidden; }
+        body { margin: 0; background: var(--bg); font-family: 'Montserrat', sans-serif; overflow: hidden; color: var(--accent); }
+        
+        header { background: #fff; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 1000; }
+        #tit { font-weight: 700; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* СПЛЭШ */
-        #splash { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000000; transition: opacity 0.8s; }
-        .b-txt { font-family: 'Amiri', serif; font-size: 34px; color: var(--gold); text-align: center; margin-bottom: 20px; }
-        .spin { width: 40px; height: 40px; border: 3px solid #1a1a1a; border-top-color: var(--gold); border-radius: 50%; animation: s 0.8s linear infinite; }
-        @keyframes s { to { transform: rotate(360deg); } }
-
-        main { height: 100vh; overflow-y: auto; padding-bottom: 100px; filter: brightness(var(--br)); }
-        header { position: sticky; top: 0; z-index: 1000; background: var(--bg); padding: 15px; border-bottom: 1px solid #222; }
-        #search { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #333; background: #111; color: #fff; margin-top: 10px; font-size: 16px; }
-
-        .p { display: none; padding: 10px; }
+        main { height: calc(100vh - 145px); overflow-y: auto; padding: 15px; }
+        .p { display: none; animation: fadeIn 0.3s ease; }
         .p.active { display: block; }
-        .item { display: flex; align-items: center; padding: 18px 10px; border-bottom: 1px solid #222; }
-        .num { color: var(--gold); width: 40px; font-weight: bold; }
-        .ar { font-family: 'Amiri', serif; font-size: 26px; color: var(--gold); margin-left: auto; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ОКНО ЧТЕНИЯ И АЯТЫ */
-        .win { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 950000; overflow-y: auto; padding-bottom: 100px; }
-        .win-h { position: sticky; top: 0; background: inherit; height: 65px; display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid #222; z-index: 100; }
-        
-        .inner-bism { font-family: 'Amiri', serif; font-size: 32px; color: var(--gold); text-align: center; padding: 30px 10px; border-bottom: 1px double var(--gold); margin-bottom: 20px; }
-        
-        .ayah-card { padding: 20px; border-bottom: 1px solid #222; display: flex; flex-direction: column; }
-        .art { direction: rtl; font-family: 'Amiri', serif; font-size: var(--fz); line-height: var(--lh); text-align: right; margin-bottom: 15px; }
-        .rut { opacity: 0.8; line-height: 1.5; font-size: 16px; margin-bottom: 15px; }
-        
-        .play-btn { align-self: flex-start; background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 13px; }
-        .play-btn.playing { background: var(--gold); color: #fff; }
+        /* СЕТКА ГЛАВНОЙ: ИКОНКИ СВЕРХУ */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .card-btn { 
+            background: #fff; border-radius: 20px; padding: 25px 10px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        .card-btn:active { transform: scale(0.95); background: #fdfdfd; }
+        .card-btn i { font-size: 32px; color: var(--gold); margin-bottom: 12px; }
+        .card-btn b { font-size: 14px; color: #444; }
 
-        nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: var(--bg); display: flex; border-top: 1px solid #222; z-index: 900000; padding-bottom: env(safe-area-inset-bottom); }
-        .btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #666; font-weight: bold; }
-        .btn.active { color: var(--gold); }
-        .btn i { font-style: normal; font-size: 22px; margin-bottom: 4px; }
+        /* ОКНО ЧТЕНИЯ */
+        .win { display: none; position: fixed; inset: 0; background: #fff; z-index: 10000; overflow-y: auto; }
+        .art { 
+            direction: rtl; font-family: 'Amiri', serif; font-size: var(--fz); 
+            line-height: 2.2; text-align: right; color: #000; padding: 15px 20px;
+        }
+        .rut { font-size: 16px; color: #555; padding: 0 20px 15px; border-left: 4px solid var(--gold); margin: 10px 20px; line-height: 1.5; }
+        .play-btn { background: var(--gold); color: #fff; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; margin: 0 20px 30px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
 
-        .card { background: #0f0f0f; border-radius: 16px; padding: 18px; margin-bottom: 15px; border: 1px solid #222; }
-        .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        input[type="range"] { accent-color: var(--gold); width: 50%; }
+        /* ВИКТОРИНА */
+        .quiz-box { background: #fff; padding: 30px 20px; border-radius: 25px; text-align: center; }
+        .ans-btn { background: #f8f9fa; border: 2px solid #eee; padding: 15px; border-radius: 15px; margin-top: 12px; width: 100%; font-weight: 700; cursor: pointer; transition: 0.3s; }
+
+        /* НАВИГАЦИЯ */
+        nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: #fff; border-top: 1px solid #ddd; display: flex; z-index: 3000; }
+        .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bbb; font-size: 10px; font-weight: 700; cursor: pointer; }
+        .nav-btn.active { color: var(--gold); }
+        .nav-btn i { font-size: 20px; margin-bottom: 4px; }
     </style>
 </head>
-<body class="dark">
+<body>
 
-<div id="splash">
-    <div class="b-txt">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
-    <div class="spin"></div>
-</div>
+<header>
+    <i class="fa fa-bars-staggered" onclick="tab('m')"></i>
+    <div id="tit">AL Quran</div>
+    <i class="fa fa-user-circle" onclick="tab('s')"></i>
+</header>
 
-<main id="main_scroll">
-    <header>
-        <h1 id="tit" style="margin:0; font-size: 20px; color: var(--gold);">Al Quran pro</h1>
-        <input type="text" id="search" placeholder="Поиск суры..." onkeyup="filter()">
-    </header>
-    <div id="q_p" class="p active"></div>
-    <div id="n_p" class="p"></div>
-    <div id="s_p" class="p">
-        <div class="card">
-            
-            <div class="row"><span>Яркость</span><input type="range" min="30" max="100" value="100" oninput="document.documentElement.style.setProperty('--br', this.value+'%')"></div>
+<main>
+    <div id="m_p" class="p active">
+        <div class="grid">
+            <div class="card-btn" onclick="tab('q')"><i class="fa-solid fa-book-quran"></i><b>Коран</b></div>
+            <div class="card-btn" onclick="tab('n')"><i class="fa-solid fa-star"></i><b>99 Имен</b></div>
+            <div class="card-btn" onclick="startQuiz()"><i class="fa-solid fa-lightbulb"></i><b>Викторина</b></div>
+            <div class="card-btn" onclick="tab('h')"><i class="fa-solid fa-kaaba"></i><b>Хадисы</b></div>
         </div>
-        <div class="card">
-            <div class="row"><span>Размер текста</span><input type="range" min="20" max="75" value="32" oninput="document.documentElement.style.setProperty('--fz', this.value+'px')"></div>
+    </div>
+
+    <div id="q_p" class="p"><div id="surahList"></div></div>
+
+    <div id="n_p" class="p"><div class="grid" id="namesContainer"></div></div>
+
+    <div id="z_p" class="p">
+        <div class="quiz-box">
+            <div id="q-progress" style="color:var(--gold); font-weight:700; margin-bottom:10px;"></div>
+            <h3 id="q-txt">Загрузка вопроса...</h3>
+            <div id="q-ans"></div>
+            <div id="q-res" style="margin-top:20px; font-weight:700; height:20px;"></div>
         </div>
+    </div>
+
+    <div id="s_p" class="p" style="text-align:center; padding-top:30px;">
+        <i class="fa fa-circle-user" style="font-size:80px; color:#ddd;"></i>
+        <h2>Мой Профиль</h2>
+        <p>Разработчик: <b>@kyfax</b></p>
+        <div class="card-btn" style="width:100%; margin-top:20px;" onclick="location.reload()">Обновить приложение</div>
+    </div>
+
+    <div id="h_p" class="p" style="text-align:center; padding-top:50px;">
+        <i class="fa fa-clock" style="font-size:50px; color:#ccc;"></i>
+        <h3>Хадисы</h3>
+        <p>Раздел находится в разработке</p>
     </div>
 </main>
 
 <div id="reader" class="win">
-    <div class="win-h"><button onclick="closeR()" style="background:none; border:none; color:var(--gold); font-size:30px;">✕</button><h2 id="wt" style="flex:1; text-align:center; font-size:16px;"></h2></div>
+    <div style="position:sticky; top:0; background:#fff; height:65px; display:flex; align-items:center; padding:0 20px; border-bottom:1px solid #eee; z-index:100;">
+        <i class="fa fa-chevron-left" onclick="closeR()" style="font-size:20px; color:var(--gold)"></i>
+        <div id="wt" style="flex:1; text-align:center; font-weight:800; color:#2c3e50;"></div>
+    </div>
     <div id="wc"></div>
 </div>
 
 <nav>
-    <div class="btn active" onclick="tab('q', this, 'Коран')"><i>•</i>Коран</div>
-    <div class="btn" onclick="tab('n', this, '99 Имен')"><i>•</i>Имена</div>
-    <div class="btn" onclick="tab('s', this, 'Опции')"><i>•</i>Опции</div>
+    <div class="nav-btn active" onclick="tab('m', this)"><i class="fa fa-th-large"></i>ГЛАВНАЯ</div>
+    <div class="nav-btn" onclick="tab('q', this)"><i class="fa fa-book-open"></i>КОРАН</div>
+    <div class="nav-btn" onclick="tab('n', this)"><i class="fa fa-star"></i>ИМЕНА</div>
 </nav>
 
 <script>
-let surs = [], aud = new Audio(), curB = null;
+let aud = new Audio(), curBtn = null;
 
-const names = [
-    {a:"الرَّحْمَنُ", t:"Ar-Rahman", r:"Милостивый"}, {a:"الرَّحِيمُ", t:"Ar-Rahim", r:"Милосердный"},
-    {a:"الْمَلِكُ", t:"Al-Malik", r:"Царь"}, {a:"الْقُدُّوسُ", t:"Al-Quddus", r:"Святой"},
-    {a:"السَّلَامُ", t:"As-Salam", r:"Пречистый"}, {a:"الْمُؤْمِنُ", t:"Al-Mu'min", r:"Оберегающий"},
-    {a:"الْمُهَيْمِنُ", t:"Al-Muhaymin", r:"Попечитель"}, {a:"الْعَزِيزُ", t:"Al-Aziz", r:"Могущественный"},
-    {a:"الْجَبَّارُ", t:"Al-Jabbar", r:"Подчиняющий"}, {a:"الْمُتَكَبِّرُ", t:"Al-Mutakabbir", r:"Превосходящий"},
-    {a:"الْخَالِقُ", t:"Al-Khaliq", r:"Творец"}, {a:"الْبَارِئُ", t:"Al-Bari", r:"Создатель"},
-    {a:"الْمُصَوِّرُ", t:"Al-Musawwir", r:"Придающий облик"}, {a:"الْغَفَّارُ", t:"Al-Ghaffar", r:"Прощающий"},
-    {a:"الْقَهَّارُ", t:"Al-Qahhar", r:"Господствующий"}, {a:"الْوَهَّابُ", t:"Al-Wahhab", r:"Дарующий"},
-    {a:"الرَّزَّاقُ", t:"Ar-Razzaq", r:"Наделяющий"}, {a:"الْفَتَّاحُ", t:"Al-Fattah", r:"Раскрывающий"},
-    {a:"الْعَلِيمُ", t:"Al-Alim", r:"Всезнающий"}, {a:"الْقَابِضُ", t:"Al-Qabid", r:"Сжимающий"},
-    {a:"الْبَاسِطُ", t:"Al-Basit", r:"Расширяющий"}, {a:"الْخَافِضُ", t:"Al-Khafid", r:"Унижающий"},
-    {a:"الرَّافِعُ", t:"Ar-Rafi", r:"Возвышающий"}, {a:"الْمُعِزُّ", t:"Al-Mu'izz", r:"Дающий силу"},
-    {a:"الْمُذِلُّ", t:"Al-Mudhill", r:"Лишающий силы"}, {a:"السَّمِيعُ", t:"As-Sami", r:"Всеслышащий"},
-    {a:"الْبَصِيرُ", t:"Al-Basir", r:"Всевидящий"}, {a:"الْحَكَمُ", t:"Al-Hakam", r:"Судья"},
-    {a:"الْعَدْلُ", t:"Al-Adl", r:"Справедливый"}, {a:"اللَّطِيفُ", t:"Al-Latif", r:"Добрый"},
-    {a:"الْخَبِيرُ", t:"Al-Khabir", r:"Осведомленный"}, {a:"الْحَلِيمُ", t:"Al-Halim", r:"Снисходительный"},
-    {a:"الْعَظِيمُ", t:"Al-Azim", r:"Величайший"}, {a:"الْغَفُورُ", t:"Al-Ghafur", r:"Многопрощающий"},
-    {a:"الشَّكُورُ", t:"Ash-Shakur", r:"Благодарный"}, {a:"الْعَلِيُّ", t:"Al-Aliy", r:"Высочайший"},
-    {a:"الْكَبِيرُ", t:"Al-Kabir", r:"Великий"}, {a:"الْحَفِيظُ", t:"Al-Hafiz", r:"Хранитель"},
-    {a:"الْمُقِيتُ", t:"Al-Muqit", r:"Питающий"}, {a:"الْحَسِيبُ", t:"Al-Hasib", r:"Считающий"},
-    {a:"الْجَلِيلُ", t:"Al-Jalil", r:"Величественный"}, {a:"الْكَرِيمُ", t:"Al-Karim", r:"Щедрый"},
-    {a:"الرَّقِيبُ", t:"Ar-Raqib", r:"Наблюдающий"}, {a:"الْمُجِيبُ", t:"Al-Mujib", r:"Отзывчивый"},
-    {a:"الْوَاسِعُ", t:"Al-Wasi", r:"Всеобъемлющий"}, {a:"الْحَكِيمُ", t:"Al-Hakim", r:"Мудрый"},
-    {a:"الْوَدُودُ", t:"Al-Wadud", r:"Любящий"}, {a:"الْمَجِيدُ", t:"Al-Majid", r:"Славный"},
-    {a:"الْبَاعِثُ", t:"Al-Ba'ith", r:"Воскрешающий"}, {a:"الشَّهِيدُ", t:"Ash-Shahid", r:"Свидетель"},
-    {a:"الْحَقُّ", t:"Al-Haqq", r:"Истинный"}, {a:"الْوَكِيلُ", t:"Al-Wakil", r:"Попечитель"},
-    {a:"الْقَوِيُّ", t:"Al-Qawiy", r:"Сильнейший"}, {a:"الْمَتِينُ", t:"Al-Matin", r:"Непоколебимый"},
-    {a:"الْوَلِيُّ", t:"Al-Waliy", r:"Покровитель"}, {a:"الْحَمِيدُ", t:"Al-Hamid", r:"Достойный похвалы"},
-    {a:"الْمُحْصِي", t:"Al-Muhsi", r:"Считающий"}, {a:"الْمُبْدِئُ", t:"Al-Mubdi", r:"Основатель"},
-    {a:"الْمُعِيدُ", t:"Al-Mu'id", r:"Возвращающий"}, {a:"الْمُحْيِي", t:"Al-Muhyi", r:"Животворящий"},
-    {a:"الْمُمِيتُ", t:"Al-Mumit", r:"Умерщвляющий"}, {a:"الْحَيُّ", t:"Al-Hayy", r:"Вечно живой"},
-    {a:"الْقَيُّومُ", t:"Al-Qayyum", r:"Самодостаточный"}, {a:"الْوَاجِدُ", t:"Al-Wajid", r:"Находящий"},
-    {a:"الْمَاجِدُ", t:"Al-Majid", r:"Благородный"}, {a:"الْوَاحِدُ", t:"Al-Wahid", r:"Единственный"},
-    {a:"الأَحَدُ", t:"Al-Ahad", r:"Единый"}, {a:"الصَّمَدُ", t:"As-Samad", r:"Вечный"},
-    {a:"الْقَادِرُ", t:"Al-Qadir", r:"Всемогущий"}, {a:"الْمُقْتَدِرُ", t:"Al-Muqtadir", r:"Всесильный"},
+// ПОЛНЫЙ СПИСОК 99 ИМЕН АЛЛАХА
+const namesData = [
+    {a:"الرَّحْمَنُ", t:"Ar-Rahmān", r:"Милостивый"}, {a:"الرَّحِيمُ", t:"Ar-Rahīm", r:"Милосердный"},
+    {a:"الْمَلِكُ", t:"Al-Malik", r:"Царь"}, {a:"الْقُدُّوسُ", t:"Al-Quddūs", r:"Святой"},
+    {a:"السَّلَامُ", t:"As-Salām", r:"Пречистый"}, {a:"الْمُؤْمِنُ", t:"Al-Mu'min", r:"Оберегающий"},
+    {a:"الْمُهَيْمِنُ", t:"Al-Muhaymin", r:"Попечитель"}, {a:"الْعَزِيزُ", t:"Al-Azīz", r:"Могущественный"},
+    {a:"الْجَبَّارُ", t:"Al-Jabbār", r:"Подчиняющий"}, {a:"الْمُتَكَبِّرُ", t:"Al-Mutakabbir", r:"Превосходящий"},
+    {a:"الْخَالِقُ", t:"Al-Khāliq", r:"Творец"}, {a:"الْبَارِئُ", t:"Al-Bāri'", r:"Создатель"},
+    {a:"الْمُصَوِّرُ", t:"Al-Musawwir", r:"Дарующий облик"}, {a:"الْغَفَّارُ", t:"Al-Ghaffār", r:"Прощающий"},
+    {a:"الْقَهَّارُ", t:"Al-Qahhār", r:"Господствующий"}, {a:"الْوَهَّابُ", t:"Al-Wahhāb", r:"Дарующий"},
+    {a:"الرَّЗَّاقُ", t:"Ar-Razzāq", r:"Наделяющий"}, {a:"الْفَتَّاحُ", t:"Al-Fattāh", r:"Раскрывающий"},
+    {a:"الْعَلِيمُ", t:"Al-'Alīm", r:"Всезнающий"}, {a:"الْقَابِضُ", t:"Al-Qābid", r:"Удерживающий"},
+    {a:"الْبَاسِطُ", t:"Al-Bāsit", r:"Развертывающий"}, {a:"الْخَافِضُ", t:"Al-Khāfid", r:"Унижающий"},
+    {a:"الرَّافِعُ", t:"Ar-Rāfi'", r:"Возвышающий"}, {a:"الْمُعِزُّ", t:"Al-Mu'izz", r:"Возвеличивающий"},
+    {a:"الْمُذِلُّ", t:"Al-Mudhill", r:"Принижающий"}, {a:"السَّمِيعُ", t:"As-Samī'", r:"Всеслышащий"},
+    {a:"الْبَصِيرُ", t:"Al-Basīr", r:"Всевидящий"}, {a:"الْحَكَمُ", t:"Al-Hakam", r:"Судья"},
+    {a:"الْعَدْلُ", t:"Al-'Adl", r:"Справедливый"}, {a:"اللَّطِيفُ", t:"Al-Latīf", r:"Проницательный"},
+    {a:"الْخَبِيرُ", t:"Al-Khabīr", r:"Всеведущий"}, {a:"الْحَلِيمُ", t:"Al-Halīm", r:"Снисходительный"},
+    {a:"الْعَظِيمُ", t:"Al-'Azīm", r:"Величайший"}, {a:"الْغَفُورُ", t:"Al-Ghafūr", r:"Всепрощающий"},
+    {a:"الشَّكُورُ", t:"Ash-Shakūr", r:"Благодарный"}, {a:"الْعَلِيُّ", t:"Al-'Alī", r:"Всевышний"},
+    {a:"الْكَبِيرُ", t:"Al-Kabīr", r:"Большой"}, {a:"الْحَفِيظُ", t:"Al-Hafīz", r:"Хранитель"},
+    {a:"الْمُقِيتُ", t:"Al-Muqīt", r:"Поддерживающий"}, {a:"الْحَسِيبُ", t:"Al-Hasīb", r:"Достаточный"},
+    {a:"الْجَلِيلُ", t:"Al-Jalīl", r:"Величественный"}, {a:"الْكَرِيمُ", t:"Al-Karīm", r:"Щедрый"},
+    {a:"الرَّقِيبُ", t:"Ar-Raqīb", r:"Наблюдающий"}, {a:"الْمُجِيبُ", t:"Al-Mujīb", r:"Отзывчивый"},
+    {a:"الْوَاسِعُ", t:"Al-Wāsi'", r:"Всеобъемлющий"}, {a:"الْحَكِيمُ", t:"Al-Hakīm", r:"Мудрый"},
+    {a:"الْوَدُودُ", t:"Al-Wadūd", r:"Любящий"}, {a:"الْمَجِيدُ", t:"Al-Majīd", r:"Славный"},
+    {a:"الْبَاعِثُ", t:"Al-Bā'ith", r:"Воскрешающий"}, {a:"الشَّهِيدُ", t:"Ash-Shahīd", r:"Свидетель"},
+    {a:"الْحَقُّ", t:"Al-Haqq", r:"Истина"}, {a:"الْوَكِيلُ", t:"Al-Wakīl", r:"Попечитель"},
+    {a:"الْقَوِيُّ", t:"Al-Qawī", r:"Сильный"}, {a:"الْمَتِينُ", t:"Al-Matīn", r:"Непоколебимый"},
+    {a:"الْوَلِيُّ", t:"Al-Walī", r:"Покровитель"}, {a:"الْحَمِيدُ", t:"Al-Hamīd", r:"Достойный хвалы"},
+    {a:"الْمُحْصِي", t:"Al-Muhsī", r:"Считающий"}, {a:"الْمُبْدِئُ", t:"Al-Mubdi'", r:"Основатель"},
+    {a:"الْمُعِيدُ", t:"Al-Mu'īd", r:"Возвращающий"}, {a:"الْمُحْيِي", t:"Al-Muhyī", r:"Оживляющий"},
+    {a:"الْمُمِيتُ", t:"Al-Mumīt", r:"Умерщвляющий"}, {a:"الْحَيُّ", t:"Al-Hayy", r:"Вечно живой"},
+    {a:"الْقَيُّومُ", t:"Al-Qayyūm", r:"Самодостаточный"}, {a:"الْوَاجِدُ", t:"Al-Wājid", r:"Находящий"},
+    {a:"الْمَاجِدُ", t:"Al-Mājid", r:"Благородный"}, {a:"الْوَاحِدُ", t:"Al-Wāhid", r:"Единственный"},
+    {a:"الْأَحَدُ", t:"Al-Ahad", r:"Единый"}, {a:"الصَّمَدُ", t:"As-Samad", r:"Вечный"},
+    {a:"الْقَادِرُ", t:"Al-Qādir", r:"Всемогущий"}, {a:"الْمُقْتَدِرُ", t:"Al-Muqtadir", r:"Всесильный"},
     {a:"الْمُقَدِّمُ", t:"Al-Muqaddim", r:"Выдвигающий вперед"}, {a:"الْمُؤَخِّرُ", t:"Al-Mu'akhkhir", r:"Отодвигающий"},
-    {a:"الأَوَّلُ", t:"Al-Awwal", r:"Первый"}, {a:"الآخِرُ", t:"Al-Akhir", r:"Последний"},
-    {a:"الظَّاهِرُ", t:"Az-Zahir", r:"Явный"}, {a:"الْبَاطِنُ", t:"Al-Batin", r:"Скрытый"},
-    {a:"الْوَالِي", t:"Al-Wali", r:"Правящий"}, {a:"الْمُتَعَالِي", t:"Al-Muta'ali", r:"Превознесенный"},
-    {a:"الْبَرُّ", t:"Al-Barr", r:"Добродетельный"}, {a:"التَّوَّابُ", t:"At-Tawwab", r:"Принимающий покаяние"},
-    {a:"الْمُنْتَقِمُ", t:"Al-Muntaqim", r:"Мстящий"}, {a:"الْعَفُوُّ", t:"Al-Afuww", r:"Прощающий"},
-    {a:"الرَّؤُوفُ", t:"Ar-Ra'uf", r:"Сострадательный"}, {a:"مَالِكُ الْمُلْكِ", t:"Malikul-Mulk", r:"Царь царей"},
-    {a:"ذُو الْجَلَالِ وَالإِكْرَامِ", t:"Zul-Jalali", r:"Обладатель величия"}, {a:"الْمُقْسِطُ", t:"Al-Muqsit", r:"Справедливый"},
-    {a:"الْجَامِعُ", t:"Al-Jami", r:"Собирающий"}, {a:"الْغَنِيُّ", t:"Al-Ghani", r:"Богатый"},
-    {a:"الْمُغْنِي", t:"Al-Mughni", r:"Обогащающий"}, {a:"الْمَانِعُ", t:"Al-Mani", r:"Удерживающий"},
-    {a:"الضَّارُّ", t:"Ad-Darr", r:"Лишающий благ"}, {a:"النَّافِعُ", t:"An-Nafi", r:"Благотворящий"},
-    {a:"النُّورُ", t:"An-Nur", r:"Свет"}, {a:"الْهَادِي", t:"Al-Hadi", r:"Ведущий верным путем"},
-    {a:"الْبَدِيعُ", t:"Al-Badi", r:"Изобретатель"}, {a:"الْبَاقِي", t:"Al-Baqi", r:"Вечный"},
-    {a:"الْوَارِثُ", t:"Al-Warith", r:"Наследник"}, {a:"الرَّشِيدُ", t:"Ar-Rashid", r:"Правильный"},
-    {a:"الصَّبُورُ", t:"As-Sabur", r:"Терпеливый"}
+    {a:"الْأَوَّلُ", t:"Al-Awwal", r:"Первый"}, {a:"الْآخِرُ", t:"Al-Ākhir", r:"Последний"},
+    {a:"الظَّاهِرُ", t:"Az-Zāhir", r:"Явный"}, {a:"الْبَاطِنُ", t:"Al-Bātin", r:"Скрытый"},
+    {a:"الْوَالِي", t:"Al-Wālī", r:"Правящий"}, {a:"الْمُتَعَالِي", t:"Al-Muta'ālī", r:"Превознесенный"},
+    {a:"الْبَرُّ", t:"Al-Barr", r:"Благостный"}, {a:"التَّوَّابُ", t:"At-Tawwāb", r:"Принимающий покаяние"},
+    {a:"الْمُنْتَقِمُ", t:"Al-Muntaqim", r:"Мстящий"}, {a:"العَفُوُّ", t:"Al-'Afuww", r:"Прощающий"},
+    {a:"الرَّؤُوفُ", t:"Ar-Ra'ūf", r:"Сострадательный"}, {a:"مَالِكُ الْمُلْكِ", t:"Māliku-l-Mulk", r:"Царь Царств"},
+    {a:"ذُو الْجَلَالِ وَالْإِكْرَامِ", t:"Dhū-l-Jalāli wa-l-Ikrām", r:"Обладатель Величия и Щедрости"},
+    {a:"الْمُقْسِطُ", t:"Al-Muqsit", r:"Справедливый"}, {a:"الْجَامِعُ", t:"Al-Jāmi'", r:"Собирающий"},
+    {a:"الْغَنِيُّ", t:"Al-Ghanī", r:"Богатый"}, {a:"الْمُغْنِي", t:"Al-Mughnī", r:"Обогащающий"},
+    {a:"الْمَانِعُ", t:"Al-Māni'", r:"Лишающий"}, {a:"الضَّارُّ", t:"Ad-Dārr", r:"Создающий вред"},
+    {a:"النَّافِعُ", t:"An-Nāfi'", r:"Приносить пользу"}, {a:"النُّورُ", t:"An-Nūr", r:"Свет"},
+    {a:"الْهَادِي", t:"Al-Hādī", r:"Ведущий верным путем"}, {a:"الْبَدِيعُ", t:"Al-Badī'", r:"Изобретатель"},
+    {a:"الْبَاقِي", t:"Al-Bāqī", r:"Вечный"}, {a:"الْوَارِثُ", t:"Al-Wārith", r:"Наследник"},
+    {a:"الرَّشِيدُ", t:"Ar-Rashīd", r:"Правильный"}, {a:"الصَّبُورُ", t:"As-Sabūr", r:"Терпеливый"}
 ];
 
-function tab(p, el, t) {
-    document.querySelectorAll('.p, .btn').forEach(x => x.classList.remove('active'));
-    document.getElementById(p+'_p').classList.add('active');
-    el.classList.add('active');
-    document.getElementById('tit').innerText = t;
-    document.getElementById('search').style.display = p==='s'?'none':'block';
+// ВИКТОРИНА
+const quizData = [
+    {q:"Сколько сур в Коране?", a:["114", "110", "120"], c:0},
+    {q:"Какая сура самая длинная?", a:["Ясин", "Аль-Бакара", "Аль-Фатиха"], c:1},
+    {q:"Первый пророк в Исламе?", a:["Нух", "Ибрахим", "Адам"], c:2},
+    {q:"Сколько имен у Аллаха?", a:["99", "33", "77"], c:0}
+];
+let curQ = 0, score = 0;
+
+function startQuiz() {
+    curQ = 0; score = 0;
+    tab('z');
+    showQ();
 }
 
+function showQ() {
+    const q = quizData[curQ];
+    document.getElementById('q-progress').innerText = `ВОПРОС ${curQ + 1} / ${quizData.length}`;
+    document.getElementById('q-txt').innerText = q.q;
+    document.getElementById('q-res').innerText = "";
+    document.getElementById('q-ans').innerHTML = q.a.map((opt, i) => `
+        <button class="ans-btn" onclick="checkQ(${i}, this)">${opt}</button>
+    `).join('');
+}
+
+function checkQ(idx, btn) {
+    const btns = document.querySelectorAll('.ans-btn');
+    btns.forEach(b => b.onclick = null);
+    if(idx === quizData[curQ].c) {
+        btn.style.background = "#e8f5e9"; btn.style.borderColor = "#2ecc71";
+        document.getElementById('q-res').innerText = "✅ ВЕРНО!";
+        score++;
+    } else {
+        btn.style.background = "#fdeaea"; btn.style.borderColor = "#e74c3c";
+        btns[quizData[curQ].c].style.borderColor = "#2ecc71";
+        document.getElementById('q-res').innerText = "❌ ОШИБКА!";
+    }
+    setTimeout(() => {
+        curQ++;
+        if(curQ < quizData.length) showQ();
+        else document.querySelector('.quiz-box').innerHTML = `<h3>Готово!</h3><p>Ваш результат: ${score} из ${quizData.length}</p><button class="play-btn" onclick="startQuiz()">Начать заново</button>`;
+    }, 1500);
+}
+
+// КОРАН И ЛОГИКА БАСМАЛЫ
 async function openR(id, n) {
-    const r = document.getElementById('reader');
-    r.style.display = 'block';
+    document.getElementById('reader').style.display = 'block';
     document.getElementById('wt').innerText = n;
-    document.getElementById('wc').innerHTML = "<p style='text-align:center;padding:50px;'>Загрузка...</p>";
+    document.getElementById('wc').innerHTML = "<p style='text-align:center; padding:50px;'>Священный Коран загружается...</p>";
     
-    const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,ru.kuliev`);
-    const d = await res.json();
-    
-    let content = "";
-    if (id !== 9) content += `<div class="inner-bism">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
-
-    content += d.data[0].ayahs.map((a, i) => {
-        let text = a.text;
-        if (i === 0) {
-            if (id === 1) return ""; 
-            else if (id !== 9) {
-                let words = text.split(' ');
-                text = words.slice(4).join(' ');
-            }
+    try {
+        const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,ru.kuliev`);
+        const d = await res.json();
+        let html = "";
+        
+        // ЗОЛОТОЙ ЗАГОЛОВОК (не для 1 и 9 суры)
+        if(id != 1 && id != 9) {
+            html += `<div class="art" style="text-align:center; color:var(--gold); border-bottom:1px solid #eee; font-size:32px;">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>`;
         }
-        return `<div class="ayah-card">
-            <div class="art">${text}</div>
-            <div class="rut"><b>${i+1}.</b> ${d.data[1].ayahs[i].text}</div>
-            <button class="play-btn" onclick="playA(${a.number}, this)">▶ Слушать</button>
-        </div>`;
-    }).join('');
-    
-    document.getElementById('wc').innerHTML = content;
-    r.scrollTop = 0;
+
+        d.data[0].ayahs.forEach((a, i) => {
+            let txt = a.text;
+            // УДАЛЕНИЕ 4 СЛОВ БАСМАЛЫ ИЗ 1-ГО АЯТА (кроме 1 и 9 суры)
+            if (i === 0 && id !== 1 && id !== 9) {
+                let w = txt.split(' ');
+                if (w.length >= 4) txt = w.slice(4).join(' ');
+            }
+            html += `
+                <div style="border-bottom:1px solid #f0f0f0; padding:10px 0;">
+                    <div class="art">${txt} <span style="color:var(--gold); font-size:18px; font-family:sans-serif;">﴿${i+1}﴾</span></div>
+                    <div class="rut">${d.data[1].ayahs[i].text}</div>
+                    <button class="play-btn" onclick="playA(${a.number}, this)"><i class="fa fa-play"></i> Слушать</button>
+                </div>`;
+        });
+        document.getElementById('wc').innerHTML = html;
+    } catch(e) { document.getElementById('wc').innerHTML = "<p style='text-align:center;'>Ошибка сети. Проверьте интернет.</p>"; }
 }
 
-function playA(n, b) {
-    if(curB === b && !aud.paused) { aud.pause(); b.innerText="▶ Слушать"; b.classList.remove('playing'); return; }
-    if(curB) { curB.innerText="▶ Слушать"; curB.classList.remove('playing'); }
-    curB = b; b.innerText="🔊 Играет"; b.classList.add('playing');
-    aud.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${n}.mp3`;
+function playA(num, btn) {
+    aud.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${num}.mp3`;
     aud.play();
-    aud.onended = () => { b.innerText="▶ Слушать"; b.classList.remove('playing'); };
+    btn.innerHTML = "<i class='fa fa-volume-high'></i> Играет...";
 }
 
 function closeR() { document.getElementById('reader').style.display='none'; aud.pause(); }
 
-function filter() {
-    let v = document.getElementById('search').value.toLowerCase();
-    renderQ(surs.filter(s => s.englishName.toLowerCase().includes(v)));
-}
-
-function renderQ(l) {
-    document.getElementById('q_p').innerHTML = l.map(s => `<div class="item" onclick="openR(${s.number},'${s.englishName}')"><div class="num">${s.number}</div><div class="info"><b>${s.englishName}</b><br><small>${s.numberOfAyahs} аятов</small></div><div class="ar">${s.name}</div></div>`).join('');
-}
-
-function renderN(l) {
-    document.getElementById('n_p').innerHTML = l.map((n, i) => `<div class="item"><div class="num">${i+1}</div><div class="info"><b>${n.t}</b><br><small>${n.r}</small></div><div class="ar">${n.a}</div></div>`).join('');
+function tab(p, el) {
+    document.querySelectorAll('.p, .nav-btn').forEach(x => x.classList.remove('active'));
+    document.getElementById(p+'_p').classList.add('active');
+    if(el) el.classList.add('active');
 }
 
 window.onload = () => {
-    setTimeout(() => {
-        const s = document.getElementById('splash');
-        if(s) { s.style.opacity = '0'; setTimeout(() => s.remove(), 800); }
-    }, 3000);
+    // Вывод имен
+    document.getElementById('namesContainer').innerHTML = namesData.map(n => `
+        <div class="card-btn" style="padding:15px; height:auto;">
+            <div style="font-family:'Amiri'; font-size:24px; color:var(--gold)">${n.a}</div>
+            <b>${n.t}</b><small style="color:#888; font-size:10px;">${n.r}</small>
+        </div>
+    `).join('');
+
+    // Список сур
     fetch("https://api.alquran.cloud/v1/surah").then(r => r.json()).then(d => {
-        surs = d.data;
-        renderQ(surs);
-        renderN(names);
+        document.getElementById('surahList').innerHTML = d.data.map(s => `
+            <div class="card-btn" style="flex-direction:row; width:100%; justify-content:space-between; padding:20px; margin-bottom:10px;" onclick="openR(${s.number}, '${s.englishName}')">
+                <div style="text-align:left"><b>${s.number}. ${s.englishName}</b></div>
+                <div style="font-family:'Amiri'; font-size:20px; color:var(--gold)">${s.name}</div>
+            </div>
+        `).join('');
     });
 };
 </script>
