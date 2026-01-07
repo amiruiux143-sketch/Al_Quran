@@ -3,223 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Al Quran</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Al Quran Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root { --bg: #ffffff; --gold: #b2904f; --light-gold: #f4f1ea; --text: #2c3e50; --grey: #f9f9f9; --border: #ececec; }
-        
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        :root { --bg: #ffffff; --gold: #b2904f; --text: #2c3e50; --grey: #f8f9fa; --border: #eee; --accent: #27ae60; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; background: var(--bg); font-family: 'Montserrat', sans-serif; overflow: hidden; color: var(--text); }
-
-        /* Шапка */
-        header { background: #fff; padding: 0 15px; display: flex; align-items: center; justify-content: center; height: 60px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
-        #tit { font-weight: 700; font-size: 16px; color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; }
-
-        /* Основной контент */
-        main { height: calc(100vh - 135px); overflow-y: auto; padding: 15px; max-width: 800px; margin: 0 auto; }
-        .p { display: none; padding-bottom: 80px; }
-        .p.active { display: block; }
-
-        /* Карточки главного меню */
-        .grid-main { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: var(--grey); border-radius: 18px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--border); cursor: pointer; transition: 0.3s; }
-        .card:active { transform: scale(0.96); background: var(--light-gold); }
-        .card i { font-size: 32px; color: var(--gold); margin-bottom: 12px; }
-        .card b { font-size: 14px; font-weight: 600; color: var(--text); }
-
-        /* Списки (Суры, Имена, Хадисы) */
-        .list-item { background: #fff; border-radius: 15px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); transition: 0.2s; }
-        .list-item:active { background: var(--grey); }
-        .search-box { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 20px; font-family: inherit; font-size: 15px; background: var(--grey); }
-
-        /* Арабский текст и перевод */
-        .art { direction: rtl; font-family: 'Amiri', serif; line-height: 2.1; text-align: right; color: #000; }
-        .sup-num { color: var(--gold); font-size: 18px; margin-left: 8px; font-family: 'Amiri', serif; border: 1px solid var(--light-gold); border-radius: 50%; padding: 0 10px; background: var(--light-gold); }
-        .rut { font-size: 16px; color: #444; line-height: 1.6; padding: 10px 15px; border-left: 2px solid var(--gold); margin: 10px 0; background: var(--grey); border-radius: 0 10px 10px 0; }
         
-        .taf-box { display: none; background: #fdfaf3; padding: 15px; border-radius: 12px; font-size: 14px; margin: 10px 0; border: 1px solid #f1e9d6; color: #6d5d39; line-height: 1.6; }
+        header { background: #fff; height: 60px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
+        #tit { font-weight: 700; color: var(--gold); display: flex; align-items: center; gap: 10px; text-transform: uppercase; font-size: 14px; }
 
-        /* Кнопки управления */
-        .btns-row { display: flex; gap: 10px; padding: 5px 0 20px; flex-wrap: wrap; }
-        .btn-sm { background: #fff; color: #666; border: 1px solid var(--border); padding: 10px 14px; border-radius: 10px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; transition: 0.2s; }
-        .btn-sm i { font-size: 14px; color: var(--gold); }
-        .btn-sm.playing { background: var(--gold); color: #fff; }
-        .btn-sm.playing i { color: #fff; }
-        .btn-sm.active-bm { border-color: var(--gold); color: var(--gold); }
+        main { height: calc(100vh - 135px); overflow-y: auto; padding: 15px; }
+        .p { display: none; animation: fadeIn 0.2s; }
+        .p.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Окно чтения */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: var(--grey); border-radius: 20px; padding: 20px; border: 1px solid var(--border); text-align: center; cursor: pointer; transition: 0.2s; }
+        .card:active { transform: scale(0.95); background: #f0f0f0; }
+        .card i { font-size: 28px; color: var(--gold); margin-bottom: 10px; display: block; }
+        
+        .list-item { background: #fff; border-radius: 15px; padding: 15px; margin-bottom: 10px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .search-box { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; background: var(--grey); font-family: inherit; }
+
+        .art { direction: rtl; font-family: 'Amiri', serif; line-height: 2.2; text-align: right; font-size: 32px; margin-bottom: 10px; color: #111; }
+        .rut { font-size: 16px; color: #444; line-height: 1.5; border-left: 3px solid var(--gold); padding-left: 15px; margin: 10px 0; }
+        .taf-box { background: #fdfaf3; padding: 15px; border-radius: 12px; font-size: 14px; border: 1px solid #f1e9d6; color: #6d5d39; margin-top: 10px; display: none; line-height: 1.6; }
+        
         .win { display: none; position: fixed; inset: 0; background: #fff; z-index: 4000; overflow-y: auto; }
-        .win-head { position: sticky; top: 0; background: #fff; height: 65px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 4100; justify-content: space-between; }
-        .win-head b { font-size: 16px; color: var(--text); }
+        .win-head { position: sticky; top: 0; background: #fff; height: 60px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 4100; justify-content: space-between; }
+        
+        .btns-row { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
+        .btn-sm { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .btn-sm.playing { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+        .btn-sm.playing i { color: #fff; }
+        .btn-sm i { color: var(--gold); }
 
-        /* Нижняя навигация */
+        .settings-box { background: var(--grey); padding: 18px; border-radius: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .opt-btn { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: #fff; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-weight: 600; }
+        .opt-btn.off { color: #bbb; opacity: 0.7; }
+
         nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: #fff; border-top: 1px solid var(--border); display: flex; justify-content: space-around; z-index: 3000; }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #b0b0b0; font-size: 10px; font-weight: 600; flex: 1; cursor: pointer; }
+        .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bbb; flex: 1; font-size: 10px; font-weight: 600; text-transform: uppercase; }
         .nav-btn.active { color: var(--gold); }
-        .nav-btn i { font-size: 22px; margin-bottom: 4px; }
+        .nav-btn i { font-size: 20px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-<header><div id="tit">Al Quran</div></header>
+<header><div id="tit"><i class="fa-solid fa-book-open"></i> Al Quran Pro</div></header>
 
 <main>
     <div id="m_p" class="p active">
-        <div class="grid-main">
+        <div class="grid">
             <div class="card" onclick="tab('q')"><i class="fa-solid fa-book-open"></i><b>Коран</b></div>
-            <div class="card" onclick="showBM()"><i class="fa-solid fa-bookmark"></i><b>Закладки</b></div>
-            <div class="card" onclick="tab('s')"><i class="fa-solid fa-gear"></i><b>Настройки</b></div>            
-            <div class="card" onclick="tab('h')"><i class="fa-solid fa-kaaba"></i><b>Хадисы</b></div>
-            
+            <div class="card" onclick="showBM()"><i class="fa-regular fa-bookmark"></i><b>Закладки</b></div>
+            <div class="card" onclick="tab('h')"><i class="fa-solid fa-mosque"></i><b>Хадисы</b></div>
+            <div class="card" onclick="tab('s')"><i class="fa-solid fa-sliders"></i><b>Настройки</b></div>
         </div>
     </div>
 
     <div id="q_p" class="p">
-        <input type="text" id="search" class="search-box" placeholder="Поиск суры..." onkeyup="filterSurahs()">
+        <input type="text" id="search" class="search-box" placeholder="Найти суру..." onkeyup="filterSurahs()">
         <div id="surahList"></div>
     </div>
 
-    <div id="b_p" class="p"><h3 style="text-align:center; color:var(--gold)">Сохраненное</h3><div id="bookmarksList"></div></div>
-
-    <div id="n_p" class="p"><div id="namesList"></div></div>
-
-    <div id="h_p" class="p">
-        <h3 style="text-align:center; color:var(--gold)">Мудрость Сунны</h3>
-        <div id="hadithList"></div>
-        <center><button class="btn-sm" onclick="loadHadiths()" style="margin-top:20px; background:var(--gold); color:#fff; border:none; padding:15px 30px; border-radius:15px">Обновить</button></center>
-    </div>
+    <div id="b_p" class="p"><div id="bookmarksList"></div></div>
+    <div id="h_p" class="p"><div id="hadithList" style="padding:20px; text-align:center"></div></div>
 
     <div id="s_p" class="p">
-        <div style="background:var(--grey); padding:25px; border-radius:20px; border:1px solid var(--border)">
-            <h3 style="margin-top:0">Настройки</h3>
-            <p style="font-size:14px; color:#666">Размер арабского текста:</p>
-            <input type="range" min="20" max="55" value="32" style="width:100%; accent-color:var(--gold)" oninput="updateFont(this.value)">
-            <hr style="margin:25px 0; border:0; border-top:1px solid var(--border)">
-            <p style="font-size:12px; color:#999; text-align:center">Разработчик: <b>@kyfax</b></p>
+        <div class="settings-box">
+            <h4><i class="fa-solid fa-microphone"></i> Выбор чтеца</h4>
+            <select id="reciter" onchange="stopAll()" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; font-family:inherit">
+                <option value="Alafasy_128kbps">Мишари Рашид</option>
+                <option value="Abdul_Basit_Murattal_192kbps">Абдуль-Басит</option>
+                <option value="Abdurrahmaan_As-Sudais_192kbps">Абдуррахман ас-Судейс</option>
+                <option value="Abu_Bakr_Ash-Shaatree_128kbps">Абу Бакр аш-Шатри</option>
+                <option value="Hani_Rifai_192kbps">Хани ар-Рифаи</option>
+                <option value="Mahmoud_Khalil_Al-Husary_128kbps">Махмуд аль-Хусари</option>
+                <option value="Menshawi_160kbps">Мухаммад аль-Миншави</option>
+                <option value="Saood_ash-Shuraym_128kbps">Сауд аш-Шурейм</option>
+                <option value="Maher_AlMuaiqly_64kbps">Махер аль-Муайкли</option>
+                <option value="Minshawy_Murattal_128kbps">Аль-Миншави (Муратталь)</option>
+            </select>
+        </div>
+        <div class="settings-box">
+            <h4>Текст и шрифт</h4>
+            <button id="btn-art" class="opt-btn" onclick="toggleV('art', this)">Арабский текст <i class="fa-solid fa-eye"></i></button>
+            <button id="btn-rut" class="opt-btn" onclick="toggleV('rut', this)">Русский перевод <i class="fa-solid fa-eye"></i></button>
+            <input type="range" min="20" max="50" value="32" style="width:100%; margin-top:15px" oninput="updateFont(this.value)">
         </div>
     </div>
 </main>
 
 <div id="reader" class="win">
     <div class="win-head">
-        <i class="fa fa-chevron-left" onclick="closeR()" style="font-size:20px; color:var(--gold); cursor:pointer"></i>
-        <b id="wt">Сура</b>
-        <div style="width:20px;"></div>
+        <i class="fa-solid fa-xmark" onclick="closeR()" style="color:var(--gold); font-size:24px"></i>
+        <b id="wt"></b>
+        <div style="width:24px"></div>
     </div>
-    <div id="wc" style="padding: 15px 20px;"></div>
+    <div id="wc" style="padding:20px"></div>
 </div>
 
 <nav>
-    <div class="nav-btn active" data-tab="m" onclick="tab('m')"><i class="fa-solid fa-house"></i>Главная</div>
-    <div class="nav-btn" data-tab="q" onclick="tab('q')"><i class="fa-solid fa-book-open"></i>Коран</div>
-    <div class="nav-btn" data-tab="b" onclick="showBM()"><i class="fa-solid fa-bookmark"></i>Закладки</div>
+    <div class="nav-btn active" onclick="tab('m')"><i class="fa-solid fa-house"></i>Дом</div>
+    <div class="nav-btn" onclick="tab('q')"><i class="fa-solid fa-book-open"></i>Коран</div>
+    <div class="nav-btn" onclick="showBM()"><i class="fa-regular fa-bookmark"></i></i>Закладки</div>
 </nav>
 
 <script>
-// Код JS остается твоим рабочим, я только подправил отрисовку шрифтов и элементов
-let aud = new Audio(), curFont = 32, allSurahs = [], currentAyahIdx = -1, ayahsData = [];
-let bookmarks = JSON.parse(localStorage.getItem('q_bookmarks')) || [];
-
 const ruSurahNames = ["Аль-Фатиха","Аль-Бакара","Али Имран","Ан-Ниса","Аль-Маида","Аль-Анам","Аль-Араф","Аль-Анфаль","Ат-Тауба","Юнус","Худ","Юсуф","Ар-Раад","Ибрахим","Аль-Хиджр","Ан-Нахль","Аль-Исра","Аль-Кахф","Марьям","Та Ха","Аль-Анбия","Аль-Хадж","Аль-Муминун","Ан-Нур","Аль-Фуркан","Аш-Шуара","Ан-Намль","Аль-Касас","Аль-Анкабут","Ар-Рум","Лукман","Ас-Сажда","Аль-Ахзаб","Саба","Фатыр","Ясин","Ас-Саффат","Сад","Аз-Зумар","Гафир","Фуссылат","Аш-Шура","Аз-Зухруф","Ад-Духан","Аль-Джасия","Аль-Ахкаф","Мухаммад","Аль-Фатх","Аль-Худжурат","Каф","Ад-Зарийят","Ат-Тур","Ан-Наджм","Аль-Камар","Ар-Рахман","Аль-Вакиа","Аль-Хадид","Аль-Муджадила","Аль-Хашр","Аль-Мумтахана","Ас-Сафф","Аль-Джумуа","Аль-Мунафикун","Ат-Тагабун","Ат-Тялак","Ат-Тахрим","Аль-Мульк","Аль-Калям","Аль-Хакка","Аль-Мааридж","Нух","Аль-Джинн","Аль-Муззаммиль","Аль-Муддассир","Аль-Кыйяма","Аль-Инсан","Аль-Мурсалят","Ан-Наба","Ан-Назиат","Абаса","Ат-Таквир","Аль-Инфитар","Аль-Мутаффифин","Аль-Иншикак","Аль-Бурудж","Ат-Тарик","Аль-Аля","Аль-Гашия","Аль-Фаджр","Аль-Баляд","Аш-Шамс","Аль-Лайл","Ад-Духа","Аш-Шарх","Ат-Тин","Аль-Аляк","Аль-Кадр","Аль-Байина","Аз-Залзаля","Аль-Адият","Аль-Кариа","Ат-Такасур","Аль-Аср","Аль-Хумаза","Аль-Филь","Курайш","Аль-Маун","Аль-Каусар","Аль-Кафирун","Ан-Наср","Аль-Масад","Аль-Ихляс","Аль-Фаляк","Ан-Нас"];
 
-const namesData = [
-    {a:"الرَّحْمَنُ",t:"Ар-Рахман",r:"Милостивый"},{a:"الرَّحِيمُ",t:"Ар-Рахим",r:"Милосердный"},{a:"الْمَلِكُ",t:"Аль-Малик",r:"Царь"},{a:"الْقُدُّوسُ",t:"Аль-Куддус",r:"Святой"},{a:"السَّلَامُ",t:"Ас-Салям",r:"Пречистый"},{a:"الْمُؤْمِنُ",t:"Аль-Мумин",r:"Оберегающий"},{a:"الْمُهَيْمِنُ",t:"Аль-Мухаймин",r:"Хранитель"},{a:"الْعَزِيزُ",t:"Аль-Азиз",r:"Могущественный"},{a:"الْجَبَّارُ",t:"Аль-Джаббар",r:"Могучий"},{a:"الْمُتَكَبِّرُ",t:"Аль-Мутакаббир",r:"Гордый"},
-    {a:"الْخَالِقُ",t:"Аль-Халик",r:"Творец"},{a:"الْبَارِئُ",t:"Аль-Бари",r:"Создатель"},{a:"الْمُصَوِّرُ",t:"Аль-Мусаввир",r:"Дарующий облик"},{a:"الْغَفَّارُ",t:"Аль-Гаффар",r:"Прощающий"},{a:"الْقَهَّارُ",t:"Аль-Каххар",r:"Господствующий"},{a:"الْمُوَهَّابُ",t:"Аль-Ваххаб",r:"Дарующий"},{a:"الرَّزَّاقُ",t:"Ар-Раззак",r:"Наделяющий"},{a:"الْفَتَّاحُ",t:"Аль-Фаттах",r:"Раскрывающий"},{a:"الْعَلِيمُ",t:"Аль-Алим",r:"Всезнающий"},{a:"الْقَابِضُ",t:"Аль-Кабид",r:"Сжимающий"}
-]; // И так далее...
-
-const offlineHadiths = [
-    {text: "Лучший из вас тот, кто изучает Коран и обучает ему других.", source: "Аль-Бухари"},
-    {text: "Поистине, дела оцениваются по намерениям.", source: "Аль-Бухари"},
-    {text: "Чистота — половина веры.", source: "Муслим"},
-    {text: "Улыбка в лицо твоего брата — это милостыня.", source: "Ат-Тирмизи"}
-];
+let player = new Audio();
+let allSurahs = [], ayahsData = [], curIdx = -1, curFont = 32;
+let bookmarks = JSON.parse(localStorage.getItem('qb_v4')) || [];
+let config = { art: true, rut: true };
 
 function tab(p) {
-    document.querySelectorAll('.p, .nav-btn').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.p, .nav-btn').forEach(el => el.classList.remove('active'));
     document.getElementById(p+'_p').classList.add('active');
-    let b = document.querySelector(`[data-tab="${p}"]`);
-    if(b) b.classList.add('active');
-    if(p === 'h') loadHadiths();
+    const idx = {m:0, q:1, b:2}[p];
+    if(idx !== undefined) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
 }
 
 async function openR(id, name) {
     document.getElementById('reader').style.display = 'block';
     document.getElementById('wt').innerText = name;
-    document.getElementById('wc').innerHTML = "<center style='padding:50px; color:var(--gold)'><i class='fas fa-spinner fa-spin'></i> Загрузка...</center>";
+    document.getElementById('wc').innerHTML = "<center style='margin-top:50px'><i class='fa fa-spinner fa-spin'></i> Загрузка аятов...</center>";
+    
     try {
+        // Загружаем сразу 3 версии: Оригинал, Перевод и Тафсир
         const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,ru.kuliev,ru.muntahab`);
         const data = await res.json();
         ayahsData = data.data[0].ayahs;
-        let tr = data.data[1].ayahs, taf = data.data[2].ayahs;
+        let html = "";
         
-        let html = (id != 1 && id != 9) ? `<div class="art" style="text-align:center; color:var(--gold); padding: 30px 0; font-size: 26px;">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>` : "";
-
         ayahsData.forEach((a, i) => {
             let text = a.text;
-            if (i === 0 && id != 1 && id != 9) {
-                let w = text.split(' '); if (w.length > 4) text = w.slice(4).join(' ');
+            // Убираем Бисмиллях (первые 4 слова), если это не 1 и не 9 сура и это первый аят
+            if(id != 1 && id != 9 && i === 0) {
+                let words = text.split(" ");
+                if(words.length > 4) text = words.slice(4).join(" ");
             }
-            const isSaved = bookmarks.some(b => b.id === `${id}_${i+1}`);
-            html += `
-            <div style="margin-bottom: 35px; border-bottom: 1px solid var(--border); padding-bottom: 20px;">
-                <div class="art" style="font-size:${curFont}px">${text} <span class="sup-num">${i+1}</span></div>
-                <div class="rut">${tr[i].text}</div>
-                <div id="taf-${i}" class="taf-box"><b>Толкование:</b><br>${taf[i].text}</div>
+
+            const isSaved = bookmarks.some(b => b.sId == id && b.aNum == (i+1));
+            html += `<div style="padding-bottom:20px; border-bottom:1px solid #eee; margin-bottom:20px">
+                <div class="art" style="font-size:${curFont}px; display:${config.art?'block':'none'}">${text} <span style="font-family:sans-serif; font-size:16px; color:var(--gold)">(${i+1})</span></div>
+                <div class="rut" style="display:${config.rut?'block':'none'}">${data.data[1].ayahs[i].text}</div>
+                <div id="taf-${i}" class="taf-box">${data.data[2].ayahs[i].text}</div>
                 <div class="btns-row">
-                    <button id="p-btn-${i}" class="btn-sm" onclick="togglePlay(${i})"><i class="fa fa-play"></i> Слушать</button>
-                    <button class="btn-sm" onclick="togTaf(${i})"><i class="fa fa-book-open"></i> Тафсир</button>
-                    <button class="btn-sm ${isSaved?'active-bm':''}" onclick="toggleBM(this,${id},'${name}',${i+1})"><i class="fa fa-bookmark"></i> ${isSaved?'Удалить':'Закладка'}</button>
+                    <button id="p-btn-${i}" class="btn-sm" onclick="playA(${id}, ${i})"><i class="fa fa-play"></i> Слушать</button>
+                    <button class="btn-sm" onclick="togTaf(${i})"><i class="fa-solid fa-comment-dots"></i> Тафсир</button>
+                    <button class="btn-sm" onclick="toggleBM(this, ${id}, '${name}', ${i+1})"><i class="fa-solid fa-star"></i> ${isSaved?'Удалить':'В избранное'}</button>
                 </div>
             </div>`;
         });
         document.getElementById('wc').innerHTML = html;
-        document.getElementById('reader').scrollTo(0,0);
-    } catch(e) { document.getElementById('wc').innerHTML = "<center>Ошибка сети</center>"; }
+    } catch(e) { document.getElementById('wc').innerHTML = "<center>Ошибка сети. Проверьте интернет.</center>"; }
+}
+
+function playA(sId, i) {
+    if (curIdx === i && !player.paused) { stopAll(); return; }
+    stopAll();
+    curIdx = i;
+    let btn = document.getElementById(`p-btn-${i}`);
+    if(btn) { btn.classList.add('playing'); btn.innerHTML = "<i class='fa fa-stop'></i> Стоп"; }
+
+    let rec = document.getElementById('reciter').value;
+    let sStr = sId.toString().padStart(3, '0');
+    let aStr = (i + 1).toString().padStart(3, '0');
+    
+    player.src = `https://www.everyayah.com/data/${rec}/${sStr}${aStr}.mp3`;
+    player.load();
+    player.play().catch(() => stopAll());
+
+    player.onended = () => {
+        if(i < ayahsData.length - 1) playA(sId, i + 1);
+        else stopAll();
+    };
+}
+
+function stopAll() {
+    player.pause();
+    player.src = "";
+    document.querySelectorAll('.btn-sm').forEach(b => {
+        b.classList.remove('playing');
+        if(b.id.includes('p-btn')) b.innerHTML = "<i class='fa fa-play'></i> Слушать";
+    });
+    curIdx = -1;
+}
+
+function toggleV(type, btn) {
+    config[type] = !config[type];
+    btn.classList.toggle('off', !config[type]);
+    btn.querySelector('i').className = config[type] ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+    document.querySelectorAll('.'+type).forEach(el => el.style.display = config[type] ? 'block' : 'none');
+}
+
+function togTaf(i) {
+    let t = document.getElementById(`taf-${i}`);
+    t.style.display = t.style.display === 'block' ? 'none' : 'block';
+}
+
+function updateFont(v) {
+    curFont = v;
+    document.querySelectorAll('.art').forEach(el => el.style.fontSize = v + 'px');
 }
 
 function toggleBM(btn, sId, sName, aNum) {
-    const bId = `${sId}_${aNum}`;
-    const idx = bookmarks.findIndex(b => b.id === bId);
-    if(idx===-1){bookmarks.push({id:bId,sId,sName,aNum});btn.classList.add('active-bm');btn.innerHTML='<i class="fa fa-bookmark"></i> Удалить';}
-    else{bookmarks.splice(idx,1);btn.classList.remove('active-bm');btn.innerHTML='<i class="fa fa-bookmark"></i> Закладка';}
-    localStorage.setItem('q_bookmarks', JSON.stringify(bookmarks));
+    let idx = bookmarks.findIndex(b => b.sId == sId && b.aNum == aNum);
+    if(idx == -1) {
+        bookmarks.push({sId, sName, aNum});
+        btn.innerHTML = "<i class='fa-solid fa-star'></i> Удалить";
+    } else {
+        bookmarks.splice(idx, 1);
+        btn.innerHTML = "<i class='fa-solid fa-star'></i> В избранное";
+    }
+    localStorage.setItem('qb_v4', JSON.stringify(bookmarks));
 }
 
 function showBM() {
     tab('b');
-    document.getElementById('bookmarksList').innerHTML = bookmarks.length ? bookmarks.map(b => `<div class="list-item" onclick="openR(${b.sId},'${b.sName}')"><div><b>${b.sName}</b><br><small style="color:#999">${b.aNum} аят</small></div><i class="fa fa-chevron-right" style="color:var(--gold)"></i></div>`).join('') : "<center style='padding:40px; color:#999'>Список пуст</center>";
+    let html = "<h3 style='text-align:center; color:var(--gold)'>Избранные аяты</h3>";
+    if(bookmarks.length == 0) html += "<center style='margin-top:50px; color:#bbb'>У вас нет закладок</center>";
+    bookmarks.forEach(b => {
+        html += `<div class="list-item" onclick="openR(${b.sId}, '${b.sName}')">
+            <b>${b.sName} <small>(${b.aNum} аят)</small></b>
+            <i class="fa fa-chevron-right" style="color:var(--gold)"></i>
+        </div>`;
+    });
+    document.getElementById('bookmarksList').innerHTML = html;
 }
-
-function loadHadiths() {
-    const l = document.getElementById('hadithList');
-    let hads = [...offlineHadiths].sort(() => 0.5 - Math.random()).slice(0, 5);
-    l.innerHTML = hads.map(h => `<div class="list-item" style="display:block; line-height:1.5"><b>«${h.text}»</b><br><small style="color:var(--gold)">— ${h.source}</small></div>`).join('');
-}
-
-function togglePlay(i) {
-    let b = document.getElementById(`p-btn-${i}`);
-    if (currentAyahIdx === i && !aud.paused) { stopAll(); }
-    else { stopAll(); currentAyahIdx = i; b.classList.add('playing'); b.innerHTML = "<i class='fa fa-stop'></i> Стоп"; aud.src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${ayahsData[i].number}.mp3`; aud.play(); aud.onended = () => togglePlay(i+1); }
-}
-
-function stopAll() { aud.pause(); document.querySelectorAll('.btn-sm').forEach(b => { b.classList.remove('playing'); if(b.id?.startsWith('p-btn-')) b.innerHTML = "<i class='fa fa-play'></i> Слушать"; }); }
-function closeR() { stopAll(); document.getElementById('reader').style.display='none'; }
-function togTaf(i) { let t = document.getElementById(`taf-${i}`); t.style.display = t.style.display === 'block' ? 'none' : 'block'; }
-function updateFont(v) { curFont = v; document.querySelectorAll('.art').forEach(e => e.style.fontSize = v + 'px'); }
 
 function filterSurahs() {
-    let v = document.getElementById('search').value.toLowerCase();
-    document.getElementById('surahList').innerHTML = allSurahs.filter(s => ruSurahNames[s.number-1].toLowerCase().includes(v)).map(s => `<div class="list-item" onclick="openR(${s.number},'${ruSurahNames[s.number-1]}')"><b>${s.number}. ${ruSurahNames[s.number-1]}</b><span class="art" style="font-size:20px; color:var(--gold)">${s.name}</span></div>`).join('');
+    let val = document.getElementById('search').value.toLowerCase();
+    let html = "";
+    allSurahs.forEach(s => {
+        let name = ruSurahNames[s.number-1];
+        if(name.toLowerCase().includes(val)) {
+            html += `<div class="list-item" onclick="openR(${s.number}, '${name}')">
+                <span><b>${s.number}.</b> ${name}</span>
+                <span style="font-family:'Amiri'; color:var(--gold); font-size:18px">${s.name}</span>
+            </div>`;
+        }
+    });
+    document.getElementById('surahList').innerHTML = html;
 }
 
+function closeR() { stopAll(); document.getElementById('reader').style.display='none'; }
+
 window.onload = () => {
-    fetch("https://api.alquran.cloud/v1/surah").then(r => r.json()).then(d => { allSurahs = d.data; filterSurahs(); });
-    document.getElementById('namesList').innerHTML = namesData.map((n, i) => `<div class="list-item"><div><b>${i+1}. ${n.t}</b><br><small style="color:#666">${n.r}</small></div><span class="art" style="font-size:24px; color:var(--gold)">${n.a}</span></div>`).join('');
-};
+    fetch("https://api.alquran.cloud/v1/surah").then(r => r.json()).then(d => {
+        allSurahs = d.data;
+        filterSurahs();
+    });
+    document.getElementById('hadithList').innerHTML = "<i class='fa fa-quote-left' style='color:var(--gold); font-size:40px; margin-bottom:15px'></i><p style='font-style:italic'>«Лучший из вас тот, кто изучает Коран и обучает ему других»</p><b>— Сахих аль-Бухари</b>";
+}
 </script>
 </body>
-</html>
-
 </html>
 
