@@ -3,44 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Quran Pro Russian</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Amiri:wght@400;700&family=Lateef&family=Scheherazade+New&display=swap" rel="stylesheet">
+    <title>Quran Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Amiri:wght@400;700&family=Scheherazade+New&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root { --bg: #ffffff; --gold: #b2904f; --text: #2c3e50; --grey: #f8f9fa; --border: #eee; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { margin: 0; background: var(--bg); font-family: 'Montserrat', sans-serif; color: var(--text); overflow: hidden; }
-        
         header { background: #fff; height: 60px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
         #tit { font-weight: 700; color: var(--gold); display: flex; align-items: center; gap: 10px; text-transform: uppercase; font-size: 14px; }
-
         main { height: calc(100vh - 135px); overflow-y: auto; padding: 15px; }
         .p { display: none; animation: fadeIn 0.2s; }
         .p.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .card { background: var(--grey); border-radius: 20px; padding: 25px 20px; border: 1px solid var(--border); text-align: center; cursor: pointer; margin-bottom: 15px; transition: 0.3s; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .card { background: var(--grey); border-radius: 20px; padding: 25px 15px; border: 1px solid var(--border); text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .card:active { transform: scale(0.98); background: #f0f0f0; }
-        .card i { font-size: 35px; color: var(--gold); margin-bottom: 12px; display: block; }
-        
+        .card i { font-size: 32px; color: var(--gold); margin-bottom: 10px; display: block; }
+        .card b { font-size: 13px; }
         .list-item { background: #fff; border-radius: 15px; padding: 15px; margin-bottom: 10px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .search-box { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; background: var(--grey); font-family: inherit; }
-
-        .bismillah { text-align: center; color: var(--gold); margin: 10px 0 20px; padding: 15px; border-top: 1px double var(--gold); border-bottom: 1px double var(--gold); background: #fdfaf3; }
+        .bismillah { text-align: center; color: var(--gold); margin: 10px 0 20px; padding: 15px; border-top: 1px double var(--gold); border-bottom: 1px double var(--gold); background: #fdfaf3; font-family: 'Amiri', serif; }
         .art { direction: rtl; line-height: 2.2; text-align: right; margin-bottom: 10px; color: #111; }
         .rut { font-size: 16px; color: #444; line-height: 1.5; border-left: 3px solid var(--gold); padding-left: 15px; margin: 10px 0; }
         .taf-box { background: #fdfaf3; padding: 15px; border-radius: 12px; font-size: 14px; border: 1px solid #f1e9d6; color: #6d5d39; margin-top: 10px; display: none; }
-        
         .win { display: none; position: fixed; inset: 0; background: #fff; z-index: 4000; overflow-y: auto; }
         .win-head { position: sticky; top: 0; background: #fff; padding: 10px 15px; border-bottom: 1px solid var(--border); z-index: 4100; display: flex; align-items: center; justify-content: space-between; }
-
         .btn-sm { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
         .btn-sm.playing { background: #e74c3c; color: #fff; border-color: #e74c3c; }
-
+        .btn-sm.active { background: var(--gold); color: #fff; border-color: var(--gold); }
         .set-row { background: var(--grey); padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--border); }
-        .set-row label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--gold); }
+        .set-row label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 8px; color: var(--gold); text-transform: uppercase; }
         .select-ui { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-family: inherit; background: #fff; }
-
         nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: #fff; border-top: 1px solid var(--border); display: flex; justify-content: space-around; z-index: 3000; }
         .nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bbb; flex: 1; font-size: 10px; font-weight: 600; }
         .nav-btn.active { color: var(--gold); }
@@ -53,10 +47,14 @@
 
 <main>
     <div id="m_p" class="p active">
-        <div class="card" onclick="tab('q')"><i class="fa-solid fa-book-open"></i><b>Читать Коран</b></div>
-        <div class="card" onclick="showHadith()"><i class="fa-solid fa-quote-left"></i><b>Хадис дня</b></div>
+        <div class="menu-grid">
+            <div class="card" onclick="tab('q')" style="grid-column: span 2;"><i class="fa-solid fa-book-open"></i><b>Читать Коран</b></div>
+            <div class="card" onclick="showBM()"><i class="fa-solid fa-star"></i><b>Избранное</b></div>
+            <div class="card" onclick="tab('s')"><i class="fa-solid fa-gear"></i><b>Настройки</b></div>
+        </div>
+        <div class="card" style="width:100%" onclick="showHadith()"><i class="fa-solid fa-quote-left"></i><b>Хадис дня</b></div>
         <div id="hadithDisplay" style="margin-top:10px; display:none;">
-            <div style="background:#fdfaf3; padding:20px; border-radius:20px; border:1px solid var(--gold); position:relative;">
+            <div style="background:#fdfaf3; padding:20px; border-radius:20px; border:1px solid var(--gold);">
                 <p id="hadithText" style="font-size:14px; line-height:1.6; font-style:italic;"></p>
                 <b id="hadithAuthor" style="display:block; margin-top:10px; color:var(--gold); text-align:right;"></b>
             </div>
@@ -75,27 +73,38 @@
 
     <div id="s_p" class="p">
         <h3 style="text-align:center">Настройки</h3>
+        
+        <div class="set-row" style="background:#fdfaf3; border: 2px dashed var(--gold);">
+            <label>Панель администратора</label>
+            <div id="adm-l">
+                <input type="password" id="adm-p" class="search-box" style="margin-bottom:10px" placeholder="Код доступа">
+                <button class="btn-sm active" style="width:100%" onclick="unlock()">Войти</button>
+            </div>
+            <div id="adm-s" style="display:none; justify-content:space-between; align-items:center">
+                <span>Пользователей в базе: <b id="srv-c">...</b></span>
+                <button class="btn-sm active" onclick="getStats()">Обновить</button>
+            </div>
+        </div>
+
         <div class="set-row">
-            <label>Чтец</label>
+            <label>Выберите чтеца</label>
             <select id="reciter" class="select-ui" onchange="saveSet()">
+                <option value="Nasser_Alqatami_128kbps">Нассер аль-Катами</option>
                 <option value="Alafasy_128kbps">Мишари Рашид</option>
-                <option value="Abdul_Basit_Murattal_192kbps">Абдуль-Басит</option>
                 <option value="Abdurrahmaan_As-Sudais_192kbps">Ас-Судейс</option>
+                <option value="Yasser_Salama_128kbps">Ясир Салама</option>
+                <option value="Maher_AlMuaiqly_64kbps">Махер аль-Муайкли</option>
+                <option value="Yasser_Ad-Dussary_128kbps">Ясир ад-Досари</option>
+                <option value="Ahmed_ibn_Ali_al-Ajmy_128kbps">Ахмед аль-Аджми</option>
             </select>
         </div>
-        <div class="set-row">
-            <label>Шрифт</label>
-            <select id="fontStyle" class="select-ui" onchange="saveSet()">
-                <option value="'Scheherazade New', serif">Scheherazade New</option>
-                <option value="'Amiri', serif">Amiri</option>
-                <option value="'Lateef', cursive">Lateef</option>
-            </select>
-        </div>
+
         <div class="set-row">
             <label>Размер текста: <span id="fzLabel">32</span>px</label>
             <input type="range" min="20" max="60" value="32" id="fsRange" style="width:100%" oninput="updateFontSize(this.value)">
         </div>
-        <button class="card" style="width:100%; background:#e74c3c; color:#fff; border:none" onclick="resetAll()">СБРОСИТЬ ВСЁ</button>
+
+        <button class="card" style="width:100%; background:#e74c3c; color:#fff; border:none" onclick="resetAll()">СБРОСИТЬ ДАННЫЕ</button>
     </div>
 </main>
 
@@ -116,50 +125,45 @@
 </nav>
 
 <script>
+const myKey = "quran_pro_global_stat_final";
 const ruNames = ["Аль-Фатиха","Аль-Бакара","Али Имран","Ан-Ниса","Аль-Маида","Аль-Анам","Аль-Араф","Аль-Анфаль","Ат-Тауба","Юнус","Худ","Юсуф","Ар-Раад","Ибрахим","Аль-Хиджр","Ан-Нахль","Аль-Исра","Аль-Кахф","Марьям","Та Ха","Аль-Анбия","Аль-Хадж","Аль-Муминун","Ан-Нур","Аль-Фуркан","Аш-Шуара","Ан-Намль","Аль-Касас","Аль-Анкабут","Ар-Рум","Лукман","Ас-Сажда","Аль-Ахзаб","Саба","Фатыр","Ясин","Ас-Саффат","Сад","Аз-Зумар","Гафир","Фуссылат","Аш-Шура","Аз-Зухруф","Ад-Духан","Аль-Джасия","Аль-Ахкаф","Мухаммад","Аль-Фатх","Аль-Худжурат","Каф","Ад-Зарийят","Ат-Тур","Ан-Наджм","Аль-Камар","Ар-Рахман","Аль-Вакиа","Аль-Хадид","Аль-Муджадила","Аль-Хашр","Аль-Мумтахана","Ас-Сафф","Аль-Джумуа","Аль-Мунафикун","Ат-Тагабун","Ат-Тялак","Ат-Тахрим","Аль-Мульк","Аль-Калям","Аль-Хакка","Аль-Мааридж","Нух","Аль-Джинн","Аль-Муззаммиль","Аль-Муддассир","Аль-Кыйяма","Аль-Инсан","Аль-Мурсалят","Ан-Наба","Ан-Назиат","Абаса","Ат-Таквир","Аль-Инфитар","Аль-Мутаффифин","Аль-Иншикак","Аль-Бурудж","Ат-Тарик","Аль-Аля","Аль-Гашия","Аль-Фаджр","Аль-Баляд","Аш-Шамс","Аль-Лайл","Ад-Духа","Аш-Шарх","Ат-Тин","Аль-Аляк","Аль-Кадр","Аль-Байина","Аз-Залзаля","Аль-Адият","Аль-Кариа","Ат-Такасур","Аль-Аср","Аль-Хумаза","Аль-Филь","Курайш","Аль-Маун","Аль-Каусар","Аль-Кафирун","Ан-Наср","Аль-Масад","Аль-Ихляс","Аль-Фаляк","Ан-Нас"];
-const hadiths = [
-    {t: "Лучший из вас тот, кто изучал Коран и обучал ему других.", a: "аль-Бухари"},
-    {t: "Дела оцениваются только по намерениям.", a: "аль-Бухари"},
-    {t: "Силен не тот, кто может повергнуть других, силен тот, кто владеет собой в гневе.", a: "Муслим"},
-    {t: "Чистота — половина веры.", a: "Муслим"},
-    {t: "Тот, кто верит в Аллаха и в Судный день, пусть говорит благое или молчит.", a: "аль-Бухари"}
-];
+const hadiths = [{t:"Лучший из вас тот, кто изучал Коран и обучал ему других.", a:"аль-Бухари"}, {t:"Чистота — половина веры.", a:"Муслим"}, {t:"Поистине, дела оцениваются по намерениям.", a:"аль-Бухари"}];
 
 let player = new Audio();
 let allSurahs = [], ayahsData = [], curIdx = -1;
-let userSet = JSON.parse(localStorage.getItem('q_final_v1')) || { font: 32, style: "'Scheherazade New', serif", reciter: "Alafasy_128kbps" };
-let bookmarks = JSON.parse(localStorage.getItem('q_marks_v1')) || [];
+let userSet = JSON.parse(localStorage.getItem('q_set')) || { font: 32, reciter: "Nasser_Alqatami_128kbps" };
+let bookmarks = JSON.parse(localStorage.getItem('q_fav')) || [];
+
+function unlock() {
+    if(document.getElementById('adm-p').value === "18021953") {
+        document.getElementById('adm-l').style.display = 'none';
+        document.getElementById('adm-s').style.display = 'flex';
+        getStats();
+    } else alert("Доступ запрещен");
+}
+
+function getStats() {
+    document.getElementById('srv-c').innerText = "⏳";
+    fetch(`https://api.countapi.xyz/get/${myKey}/u`)
+        .then(r => r.json()).then(d => { document.getElementById('srv-c').innerText = d.value; })
+        .catch(() => { document.getElementById('srv-c').innerText = "0"; });
+}
 
 function saveSet() {
-    userSet.style = document.getElementById('fontStyle').value;
     userSet.reciter = document.getElementById('reciter').value;
-    localStorage.setItem('q_final_v1', JSON.stringify(userSet));
+    localStorage.setItem('q_set', JSON.stringify(userSet));
     applyUI();
 }
 
-function updateFontSize(v) {
-    userSet.font = parseInt(v);
-    document.getElementById('fzLabel').innerText = v;
-    saveSet();
-}
-
-function applyUI() {
-    document.querySelectorAll('.art, .bismillah').forEach(el => {
-        el.style.fontFamily = userSet.style;
-        el.style.fontSize = userSet.font + 'px';
-    });
-}
-
-function resetAll() {
-    if(confirm("Сбросить?")) { localStorage.clear(); location.reload(); }
-}
+function updateFontSize(v) { userSet.font = parseInt(v); document.getElementById('fzLabel').innerText = v; saveSet(); }
+function applyUI() { document.querySelectorAll('.art, .bismillah').forEach(el => { el.style.fontSize = userSet.font + 'px'; el.style.fontFamily = "'Scheherazade New', serif"; }); }
 
 function tab(p) {
     document.querySelectorAll('.p, .nav-btn').forEach(el => el.classList.remove('active'));
     document.getElementById(p+'_p').classList.add('active');
-    const btns = document.querySelectorAll('.nav-btn');
+    const b = document.querySelectorAll('.nav-btn');
     const m = {m:0, q:1, b:2, s:3};
-    btns[m[p]].classList.add('active');
+    if(m[p] !== undefined) b[m[p]].classList.add('active');
 }
 
 function showHadith() {
@@ -172,96 +176,76 @@ function showHadith() {
 async function openR(id, name) {
     document.getElementById('reader').style.display = 'block';
     document.getElementById('wt').innerText = name;
-    document.getElementById('wc').innerHTML = "<center style='margin-top:50px'><i class='fa fa-spinner fa-spin'></i> Загрузка...</center>";
+    document.getElementById('wc').innerHTML = "<center style='margin-top:50px'><i class='fa fa-spinner fa-spin'></i></center>";
     try {
         const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,ru.kuliev,ru.muntahab`);
         const data = await res.json();
         ayahsData = data.data[0].ayahs;
-        let html = "";
-        if(id != 1 && id != 9) html += `<div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>`;
+        let h = (id!=1 && id!=9) ? `<div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>` : "";
         ayahsData.forEach((a, i) => {
             let t = a.text;
-            if(id != 1 && id != 9 && i === 0) {
-                let w = t.split(" ");
-                if(w.length > 4) t = w.slice(4).join(" ");
-            }
-            const isSaved = bookmarks.some(b => b.sId == id && b.aNum == (i+1));
-            html += `<div style="padding-bottom:20px; border-bottom:1px solid #eee; margin-bottom:20px">
-                <div class="art">${t} <span style="color:var(--gold); font-size:16px">(${i+1})</span></div>
+            if(id!=1 && id!=9 && i==0) t = t.split(" ").slice(4).join(" ");
+            const isS = bookmarks.some(b => b.sId == id && b.aNum == (i+1));
+            h += `<div style="padding-bottom:20px;border-bottom:1px solid #eee;margin-bottom:20px">
+                <div class="art">${t} <span style="color:var(--gold);font-size:16px">(${i+1})</span></div>
                 <div class="rut">${data.data[1].ayahs[i].text}</div>
                 <div id="taf-${i}" class="taf-box"><b>Толкование:</b><br>${data.data[2].ayahs[i].text}</div>
-                <div style="display:flex; gap:10px; margin-top:10px">
-                    <button id="p-btn-${i}" class="btn-sm" onclick="playA(${id}, ${i})"><i class="fa fa-play"></i> Аудио</button>
+                <div style="display:flex;gap:10px;margin-top:10px">
+                    <button id="p-btn-${i}" class="btn-sm" onclick="playA(${id},${i})"><i class="fa fa-play"></i> Аудио</button>
                     <button class="btn-sm" onclick="togTaf(${i})">Тафсир</button>
-                    <button class="btn-sm" onclick="toggleBM(this, ${id}, '${name}', ${i+1})"><i class="fa-solid fa-star"></i> ${isSaved?'Удалить':'В избранное'}</button>
-                </div>
-            </div>`;
+                    <button class="btn-sm" onclick="toggleBM(this,${id},'${name}',${i+1})"><i class="fa-solid fa-star"></i> ${isS?'Удалить':'Избранное'}</button>
+                </div></div>`;
         });
-        document.getElementById('wc').innerHTML = html;
-        applyUI();
-        document.getElementById('reader').scrollTo(0,0);
+        document.getElementById('wc').innerHTML = h; applyUI();
     } catch(e) { document.getElementById('wc').innerHTML = "Ошибка сети"; }
 }
 
 function playA(sId, i) {
     if (curIdx === i && !player.paused) { stopAll(); return; }
     stopAll(); curIdx = i;
-    let btn = document.getElementById(`p-btn-${i}`);
-    if(btn) { btn.classList.add('playing'); btn.innerHTML = "<i class='fa fa-stop'></i> Стоп"; }
-    let sStr = sId.toString().padStart(3, '0');
-    let aStr = (i + 1).toString().padStart(3, '0');
-    player.src = `https://www.everyayah.com/data/${userSet.reciter}/${sStr}${aStr}.mp3`;
-    player.play().catch(() => stopAll());
+    let b = document.getElementById(`p-btn-${i}`);
+    if(b) { b.classList.add('playing'); b.innerHTML = "<i class='fa fa-stop'></i> Стоп"; }
+    player.src = `https://www.everyayah.com/data/${userSet.reciter}/${sId.toString().padStart(3,'0')}${(i+1).toString().padStart(3,'0')}.mp3`;
+    player.play();
     player.onended = () => { if(i < ayahsData.length - 1) playA(sId, i + 1); else stopAll(); };
 }
 
 function stopAll() {
     player.pause(); player.src = "";
-    document.querySelectorAll('.btn-sm').forEach(b => {
-        b.classList.remove('playing');
-        if(b.id.includes('p-btn')) b.innerHTML = "<i class='fa fa-play'></i> Аудио";
-    });
+    document.querySelectorAll('.btn-sm').forEach(b => { if(b.id && b.id.includes('p-btn')){b.classList.remove('playing'); b.innerHTML="<i class='fa fa-play'></i> Аудио";} });
     curIdx = -1;
 }
 
-function togTaf(i) {
-    let t = document.getElementById(`taf-${i}`);
-    t.style.display = t.style.display === 'block' ? 'none' : 'block';
-}
-
+function togTaf(i) { let t = document.getElementById(`taf-${i}`); t.style.display = t.style.display === 'block' ? 'none' : 'block'; }
 function toggleBM(btn, sId, sName, aNum) {
     let idx = bookmarks.findIndex(b => b.sId == sId && b.aNum == aNum);
     if(idx == -1) { bookmarks.push({sId, sName, aNum}); btn.innerHTML = "<i class='fa-solid fa-star'></i> Удалить"; }
-    else { bookmarks.splice(idx, 1); btn.innerHTML = "<i class='fa-solid fa-star'></i> В избранное"; }
-    localStorage.setItem('q_marks_v1', JSON.stringify(bookmarks));
+    else { bookmarks.splice(idx, 1); btn.innerHTML = "<i class='fa-solid fa-star'></i> Избранное"; }
+    localStorage.setItem('q_fav', JSON.stringify(bookmarks));
 }
 
 function showBM() {
     tab('b');
-    let html = "";
-    if(!bookmarks.length) html = "<center style='margin-top:50px'>Пусто</center>";
-    bookmarks.forEach(b => {
-        html += `<div class="list-item" onclick="openR(${b.sId}, '${b.sName}')"><b>${b.sName} <small>(${b.aNum})</small></b><i class="fa fa-chevron-right"></i></div>`;
-    });
-    document.getElementById('bookmarksList').innerHTML = html;
+    let h = bookmarks.length ? "" : "<center style='margin-top:50px'>Список пуст</center>";
+    bookmarks.forEach(b => { h += `<div class="list-item" onclick="openR(${b.sId},'${b.sName}')"><b>${b.sName} (${b.aNum})</b><i class="fa fa-chevron-right"></i></div>`; });
+    document.getElementById('bookmarksList').innerHTML = h;
 }
 
 function filterSurahs() {
-    let val = document.getElementById('search').value.toLowerCase();
-    let html = "";
+    let v = document.getElementById('search').value.toLowerCase();
+    let h = "";
     allSurahs.forEach(s => {
-        let name = ruNames[s.number-1];
-        if(name.toLowerCase().includes(val)) {
-            html += `<div class="list-item" onclick="openR(${s.number}, '${name}')"><span><b>${s.number}.</b> ${name}</span><span style="font-family:'Amiri'; color:var(--gold)">${s.name}</span></div>`;
-        }
+        let n = ruNames[s.number-1];
+        if(n.toLowerCase().includes(v)) h += `<div class="list-item" onclick="openR(${s.number},'${n}')"><span><b>${s.number}.</b> ${n}</span><span style="font-family:'Amiri';color:var(--gold)">${s.name}</span></div>`;
     });
-    document.getElementById('surahList').innerHTML = html;
+    document.getElementById('surahList').innerHTML = h;
 }
 
 function closeR() { stopAll(); document.getElementById('reader').style.display='none'; }
+function resetAll() { if(confirm("Удалить все настройки и избранное?")) { localStorage.clear(); location.reload(); } }
 
 window.onload = () => {
-    document.getElementById('fontStyle').value = userSet.style;
+    fetch(`https://api.countapi.xyz/hit/${myKey}/u`).catch(()=>{});
     document.getElementById('reciter').value = userSet.reciter;
     document.getElementById('fsRange').value = userSet.font;
     document.getElementById('fzLabel').innerText = userSet.font;
@@ -270,4 +254,3 @@ window.onload = () => {
 </script>
 </body>
 </html>
-
